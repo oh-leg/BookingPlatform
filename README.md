@@ -3,4 +3,11 @@
 Система бронирования. Учебный проект.
 
 ## Технологии
-- ASP.NET Core 10
+- .NET 10
+- ASP.NET Core WebAPI
+- PostgreSQL + EntityFramework Core
+- MongoDB
+- RabbitMQ
+- SignalR
+- Keycloak
+- Docker + Kubernetes
