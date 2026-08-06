@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  keycloak-db:
+    image: postgres:17-alpine
+    container_name: booking-keycloak-db
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak_user
+      POSTGRES_PASSWORD: keycloak_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - keycloak_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak_user -d keycloak"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - booking-network
+
+  keycloak:
+    image: keycloak/keycloak:26.0.0
+    container_name: booking-keycloak
+    depends_on:
+      keycloak-db:
+        condition: service_healthy
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      
+      KC_DB: postgres
+      KC_DB_URL_HOST: keycloak-db
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_USERNAME: keycloak_user
+      KC_DB_PASSWORD: keycloak_password
+      
+      KC_HOSTNAME: localhost
+      KC_HTTP_ENABLED: true 
+      KC_HEALTH_ENABLED: true
+      KC_METRICS_ENABLED: true 
+      
+      KC_PROXY_HEADERS: xforwarded
+    ports:
+      - "8080:8080" 
+      - "9000:9000" 
+    command: start-dev 
+    networks:
+      - booking-network
+
+networks:
+  booking-network:
+    driver: bridge
+
+volumes:
+  keycloak_postgres_data:
