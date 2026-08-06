@@ -28,3 +28,10 @@ BookingPlatform — универсальная платформа для бро�
 ```bash
 docker-compose -f deploy/docker-compose.yml up -d
 ```
+
+Будут подняты следующие сервисы:
+
+| Сервис | Порт |
+| :--- | :--- |
+| PostgreSQL (Keycloak) | `5433` |
+| Keycloak | `8080` |
