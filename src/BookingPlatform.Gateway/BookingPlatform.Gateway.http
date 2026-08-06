@@ -1,0 +1,6 @@
+@BookingPlatform.Gateway_HostAddress = http://localhost:5024
+
+GET {{BookingPlatform.Gateway_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
