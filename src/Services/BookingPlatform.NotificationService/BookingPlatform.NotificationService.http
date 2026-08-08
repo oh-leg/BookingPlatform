@@ -1,0 +1,6 @@
+@BookingPlatform.NotificationService_HostAddress = http://localhost:5109
+
+GET {{BookingPlatform.NotificationService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -18,8 +18,4 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\BookingPlatform.API\BookingPlatform.API.csproj" />
-  </ItemGroup>
-
 </Project>
