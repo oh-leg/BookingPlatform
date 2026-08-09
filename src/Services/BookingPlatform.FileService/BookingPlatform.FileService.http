@@ -1,4 +1,4 @@
-@BookingPlatform.FileService_HostAddress = http://localhost:5192
+@BookingPlatform.FileService_HostAddress = http://localhost:5004
 
 GET {{BookingPlatform.FileService_HostAddress}}/weatherforecast/
 Accept: application/json
