@@ -49,6 +49,64 @@ services:
     networks:
       - booking-network
 
+  redis:
+    image: redis:7.4-alpine
+    container_name: booking-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis_password}
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - booking-network
+
+  minio:
+    image: minio/minio:latest
+    container_name: booking-minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks:
+      - booking-network
+
+  minio-init:
+    image: minio/mc:latest
+    container_name: booking-minio-init
+    depends_on:
+      minio:
+        condition: service_healthy
+    networks:
+      - booking-network
+    entrypoint: |
+      /bin/sh -c "
+      until mc alias set local http://minio:9000 ${MINIO_ROOT_USER:-minioadmin} ${MINIO_ROOT_PASSWORD:-minioadmin} 2>/dev/null; do
+        echo 'Waiting for MinIO...';
+        sleep 2;
+      done;
+      
+      mc mb --ignore-existing local/booking-files || true;
+      mc mb --ignore-existing local/booking-temp || true;
+      
+      echo 'MinIO buckets created successfully!';
+      exit 0;
+      "
+
   gateway:
     build:
       context: ..
@@ -59,10 +117,12 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:8080
+      - KEYCLOAK_HOSTNAME=keycloak
     depends_on:
       - resource-service
       - booking-service
       - notification-service
+      - file-service
     networks:
       - booking-network
 
@@ -99,9 +159,22 @@ services:
     networks:
       - booking-network
 
+  file-service:
+    build:
+      context: ..
+      dockerfile: src/Services/BookingPlatform.FileService/Dockerfile
+    container_name: booking-file-service
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+    networks:
+      - booking-network
+
 networks:
   booking-network:
     driver: bridge
 
 volumes:
   keycloak_postgres_data:
+  redis_data:
+  minio_data:

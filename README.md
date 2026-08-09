@@ -30,7 +30,7 @@ BookingPlatform — универсальная платформа для бро�
 docker-compose -f deploy/docker-compose.yml up -d
 
 # Поднять только keycloak для разработки в VS
-docker-compose --env-file .env.dev -f deploy/docker-compose.yml up -d keycloak-db keycloak
+docker-compose --env-file .env.dev -f deploy/docker-compose.yml up -d keycloak-db keycloak redis minio minio-init
 ```
 
 Будут подняты следующие сервисы:
@@ -39,6 +39,9 @@ docker-compose --env-file .env.dev -f deploy/docker-compose.yml up -d keycloak-d
 | :--- | :--- |
 | PostgreSQL (Keycloak) | `5433` |
 | Keycloak | `8080` |
+| Redis | `6379` | 
+| MinIO API | `9000` | 
+| MinIO Console | `9001` |
 | Gateway(YARP)  | `5000` |
 
 ### 2. Настройка Keycloak
@@ -100,3 +103,12 @@ curl -X POST http://localhost:8080/realms/booking-platform/protocol/openid-conne
 Authorization: Bearer {ACCESS_TOKEN}
 Получим страницу Scalar сервиса resource-service
 
+### 4. Доступ к MinIO Console
+
+После запуска MinIO, консоль доступна по адресу:
+http://localhost:9001
+
+**Логин:** `minioadmin`  
+**Пароль:** `minioadmin`
+
+В консоли вы можете просматривать загруженные файлы, создавать bucket'ы и управлять доступом.
