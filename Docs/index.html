@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookingPlatform — Современный дизайн</title>
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f6f8fc;
+            color: #1a1f36;
+            line-height: 1.6;
+        }
+        :root {
+            --primary: #2a7de1;
+            --primary-light: #e8f0fe;
+            --primary-dark: #1a5bb5;
+            --gray-50: #f8f9fc;
+            --gray-100: #f0f2f6;
+            --gray-200: #e2e6ed;
+            --gray-300: #c8cedb;
+            --gray-400: #9aa3b5;
+            --gray-500: #6b7a93;
+            --gray-600: #4a5568;
+            --gray-700: #2d3748;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.07);
+            --shadow-lg: 0 8px 40px rgba(0,0,0,0.08);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: 0.2s ease;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .logo {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo i { color: var(--primary); font-size: 1.6rem; }
+        .search-wrap {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 40px;
+            padding: 8px 18px;
+            display: flex;
+            align-items: center;
+            flex: 1;
+            max-width: 420px;
+            transition: var(--transition);
+        }
+        .search-wrap:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(42,125,225,0.1);
+        }
+        .search-wrap input {
+            border: none;
+            background: transparent;
+            padding: 6px 0;
+            width: 100%;
+            outline: none;
+            font-size: 0.9rem;
+            color: var(--gray-700);
+        }
+        .search-wrap input::placeholder { color: var(--gray-400); }
+        .search-wrap i { color: var(--gray-400); font-size: 0.9rem; }
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .nav-actions .notif {
+            position: relative;
+            font-size: 1.3rem;
+            color: var(--gray-500);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .nav-actions .notif:hover { color: var(--gray-700); }
+        .nav-actions .badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #e53e3e;
+            color: white;
+            border-radius: 50%;
+            padding: 1px 7px;
+            font-size: 0.6rem;
+            font-weight: 700;
+        }
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+        .avatar:hover { border-color: var(--primary); }
+        .btn {
+            padding: 10px 24px;
+            border-radius: 40px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--primary);
+            color: var(--primary);
+        }
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(42,125,225,0.3);
+        }
+        .btn-success {
+            background: #0f7b3a;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #0a5f2d;
+            transform: translateY(-1px);
+        }
+        .btn-danger {
+            background: #e53e3e;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #c53030;
+            transform: translateY(-1px);
+        }
+        .btn-sm { padding: 6px 16px; font-size: 0.78rem; }
+        .btn-ghost {
+            background: transparent;
+            color: var(--gray-500);
+            border: 1px solid var(--gray-200);
+        }
+        .btn-ghost:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-300);
+        }
+
+        /* ===== MAIN NAV ===== */
+        .main-nav {
+            background: white;
+            padding: 0 24px;
+            display: flex;
+            gap: 4px;
+            border-bottom: 1px solid var(--gray-200);
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .main-nav::-webkit-scrollbar { display: none; }
+        .main-nav .tab {
+            padding: 14px 20px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .main-nav .tab i { font-size: 1rem; }
+        .main-nav .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        .main-nav .tab:hover {
+            color: var(--gray-700);
+            background: var(--gray-50);
+        }
+
+        /* ===== PAGES ===== */
+        .page { display: none; padding: 32px 0; }
+        .page.active { display: block; }
+
+        /* ===== CARDS ===== */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            transition: var(--transition);
+        }
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        .card-img {
+            width: 100%;
+            height: 130px;
+            background: var(--primary-light);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 2.8rem;
+            margin-bottom: 12px;
+        }
+        .card h4 { font-weight: 600; font-size: 1rem; color: var(--gray-700); }
+        .card .meta {
+            color: var(--gray-500);
+            font-size: 0.8rem;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 4px 0;
+        }
+        .card .price { font-weight: 700; color: var(--primary); font-size: 1.05rem; }
+
+        .category-grid {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 16px 0 24px;
+        }
+        .category-item {
+            background: white;
+            border-radius: 40px;
+            padding: 10px 22px;
+            border: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--gray-600);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .category-item i { color: var(--primary); font-size: 1.1rem; }
+        .category-item:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-1px);
+        }
+
+        /* ===== FILTERS ===== */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            background: white;
+            padding: 16px 20px;
+            border-radius: var(--radius);
+            border: 1px solid var(--gray-200);
+            margin-bottom: 24px;
+            align-items: center;
+        }
+        .filter-bar select,
+        .filter-bar input {
+            padding: 8px 16px;
+            border-radius: 40px;
+            border: 1px solid var(--gray-200);
+            background: var(--gray-50);
+            font-size: 0.85rem;
+            color: var(--gray-700);
+            outline: none;
+            transition: var(--transition);
+            min-width: 120px;
+            font-family: inherit;
+        }
+        .filter-bar select:focus,
+        .filter-bar input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(42,125,225,0.1);
+        }
+        .filter-bar input[type="text"] { min-width: 180px; }
+
+        /* ===== STEPS ===== */
+        .step-indicator {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            padding: 0 4px;
+        }
+        .step-dot {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--gray-400);
+        }
+        .step-dot .num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--gray-200);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+        .step-dot.active .num { background: var(--primary); }
+        .step-dot.done .num { background: #0f7b3a; }
+        .step-dot.active { color: var(--gray-700); }
+        .step-dot.done { color: var(--gray-500); }
+
+        .booking-summary {
+            background: white;
+            border-radius: var(--radius);
+            padding: 28px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+        }
+        .slot-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 12px 0;
+        }
+        .slot-btn {
+            padding: 10px 20px;
+            border-radius: 40px;
+            border: 1px solid var(--gray-200);
+            background: white;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--gray-600);
+        }
+        .slot-btn:hover { border-color: var(--primary); background: var(--primary-light); }
+        .slot-btn.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            max-width: 380px;
+            margin: 12px 0;
+        }
+        .cal-day {
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            text-align: center;
+            background: white;
+            border: 1px solid var(--gray-200);
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        .cal-day:hover { background: var(--primary-light); border-color: var(--primary); }
+        .cal-day.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* ===== DASHBOARD LAYOUT ===== */
+        .dashboard-layout {
+            display: flex;
+            gap: 28px;
+            flex-wrap: wrap;
+        }
+        .sidebar {
+            width: 220px;
+            background: white;
+            border-radius: var(--radius);
+            border: 1px solid var(--gray-200);
+            padding: 8px 0;
+            height: fit-content;
+            box-shadow: var(--shadow-sm);
+        }
+        .sidebar-item {
+            padding: 12px 22px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 3px solid transparent;
+        }
+        .sidebar-item i { width: 20px; color: var(--gray-400); }
+        .sidebar-item.active {
+            color: var(--primary);
+            border-left-color: var(--primary);
+            background: var(--primary-light);
+            font-weight: 500;
+        }
+        .sidebar-item.active i { color: var(--primary); }
+        .sidebar-item:hover {
+            background: var(--gray-50);
+            color: var(--gray-700);
+        }
+        .content-area { flex: 1; min-width: 280px; }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal-box {
+            background: white;
+            max-width: 460px;
+            width: 92%;
+            padding: 32px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            animation: modalIn 0.25s ease;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .modal-box .close {
+            position: absolute;
+            right: 18px;
+            top: 18px;
+            font-size: 1.6rem;
+            cursor: pointer;
+            color: var(--gray-400);
+            transition: var(--transition);
+            line-height: 1;
+        }
+        .modal-box .close:hover { color: var(--gray-700); }
+
+        /* ===== TABLE ===== */
+        .table-wrap {
+            overflow-x: auto;
+            background: white;
+            border-radius: var(--radius);
+            border: 1px solid var(--gray-200);
+            padding: 4px 0;
+            box-shadow: var(--shadow-sm);
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th {
+            text-align: left;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--gray-200);
+            color: var(--gray-500);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--gray-100);
+            color: var(--gray-700);
+        }
+        tr:last-child td { border-bottom: none; }
+
+        /* ===== TAGS ===== */
+        .tag {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 3px 14px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .tag-success { background: #e6f7ed; color: #0f7b3a; }
+        .tag-danger { background: #fde8e8; color: #e53e3e; }
+        .tag-warning { background: #fef5e7; color: #d69e2e; }
+
+        /* ===== SPECIALIST ===== */
+        .specialist-grid {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 8px 0;
+        }
+        .specialist-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 18px 8px 12px;
+            border-radius: 40px;
+            border: 1px solid var(--gray-200);
+            cursor: pointer;
+            transition: var(--transition);
+            background: white;
+        }
+        .specialist-item:hover { border-color: var(--primary); background: var(--primary-light); }
+        .specialist-item.selected {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        .specialist-item .s-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        /* ===== UTILITIES ===== */
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .mt-12 { margin-top: 12px; }
+        .mb-12 { margin-bottom: 12px; }
+        .mt-20 { margin-top: 20px; }
+        .text-center { text-align: center; }
+        .text-muted { color: var(--gray-500); font-size: 0.9rem; }
+
+        .banner {
+            background: white;
+            border-radius: var(--radius);
+            padding: 32px 36px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 28px;
+        }
+        .banner h2 { font-size: 1.6rem; font-weight: 700; color: var(--gray-700); }
+        .banner p { color: var(--gray-500); margin-top: 4px; }
+
+        .footer {
+            background: white;
+            border-top: 1px solid var(--gray-200);
+            padding: 24px 0;
+            margin-top: 48px;
+            text-align: center;
+            color: var(--gray-400);
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 640px) {
+            .header-inner { flex-direction: column; align-items: stretch; }
+            .search-wrap { max-width: 100%; }
+            .nav-actions { justify-content: flex-end; }
+            .dashboard-layout { flex-direction: column; }
+            .sidebar { width: 100%; }
+            .main-nav .tab { padding: 10px 14px; font-size: 0.78rem; }
+            .banner { padding: 20px; }
+            .filter-bar input[type="text"] { min-width: 120px; }
+            .card-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+        }
+
+        /* Стиль для формы */
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--gray-200);
+            background: var(--gray-50);
+            font-size: 0.9rem;
+            transition: var(--transition);
+            outline: none;
+            font-family: inherit;
+        }
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(42,125,225,0.1);
+            background: white;
+        }
+        select.form-input { appearance: none; }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+    <div class="container header-inner">
+        <div class="logo"><i class="fas fa-calendar-check"></i>BookingPlatform</div>
+        <div class="search-wrap"><i class="fas fa-search"></i><input type="text" id="globalSearch" placeholder="Поиск услуг..."></div>
+        <div class="nav-actions">
+            <span class="notif"><i class="far fa-bell"></i><span class="badge" id="notifBadge">3</span></span>
+            <button class="btn btn-outline btn-sm" onclick="alert('Вход (mock)')">Войти</button>
+            <button class="btn btn-primary btn-sm" onclick="alert('Регистрация (mock)')">Регистрация</button>
+            <div class="avatar" onclick="alert('Профиль')">👤</div>
+        </div>
+    </div>
+    <div class="main-nav container" id="mainNav">
+        <span class="tab active" data-page="page-home"><i class="fas fa-home"></i> Главная</span>
+        <span class="tab" data-page="page-catalog"><i class="fas fa-th-list"></i> Каталог</span>
+        <span class="tab" data-page="page-resource"><i class="fas fa-info-circle"></i> Детали</span>
+        <span class="tab" data-page="page-booking"><i class="fas fa-calendar-plus"></i> Бронирование</span>
+        <span class="tab" data-page="page-client"><i class="fas fa-user"></i> Клиент</span>
+        <span class="tab" data-page="page-business"><i class="fas fa-store"></i> Бизнес</span>
+        <span class="tab" data-page="page-admin"><i class="fas fa-user-shield"></i> Админ</span>
+    </div>
+</header>
+
+<!-- PAGES -->
+<div class="container">
+    <!-- HOME -->
+    <div id="page-home" class="page active">
+        <div class="banner">
+            <h2>Бронируйте всё, что нужно ✨</h2>
+            <p>Врачи, салоны, переговорные, автомобили, спорт — тысячи услуг в одном месте</p>
+        </div>
+        <h3 style="font-size:1rem; font-weight:600; color:var(--gray-700);">Категории</h3>
+        <div class="category-grid" id="categoryGrid"></div>
+        <h3 style="font-size:1rem; font-weight:600; color:var(--gray-700);">Популярные ресурсы</h3>
+        <div class="card-grid" id="popularGrid"></div>
+    </div>
+
+    <!-- CATALOG -->
+    <div id="page-catalog" class="page">
+        <div class="filter-bar">
+            <input type="text" id="catalogSearch" placeholder="Поиск по названию" oninput="filterCatalog()">
+            <select id="catFilter" onchange="filterCatalog()"><option value="">Все категории</option></select>
+            <input type="date" id="dateFilter" onchange="filterCatalog()">
+            <input type="number" placeholder="Цена от" id="priceMin" oninput="filterCatalog()" style="width:100px;">
+            <input type="number" placeholder="до" id="priceMax" oninput="filterCatalog()" style="width:100px;">
+        </div>
+        <div class="card-grid" id="catalogGrid"></div>
+        <div class="flex-between"><span id="catalogPagination"></span></div>
+    </div>
+
+    <!-- RESOURCE DETAIL -->
+    <div id="page-resource" class="page">
+        <div id="resourceDetail"></div>
+    </div>
+
+    <!-- BOOKING -->
+    <div id="page-booking" class="page">
+        <div class="step-indicator" id="stepIndicator"></div>
+        <div id="bookingContent"></div>
+    </div>
+
+    <!-- CLIENT -->
+    <div id="page-client" class="page">
+        <div class="dashboard-layout">
+            <div class="sidebar" id="clientSidebar">
+                <div class="sidebar-item active" data-sub="client-bookings"><i class="fas fa-calendar-alt"></i> Мои бронирования</div>
+                <div class="sidebar-item" data-sub="client-profile"><i class="fas fa-user-edit"></i> Мои данные</div>
+                <div class="sidebar-item" data-sub="client-notifications"><i class="fas fa-bell"></i> Уведомления</div>
+            </div>
+            <div class="content-area" id="clientContent"></div>
+        </div>
+    </div>
+
+    <!-- BUSINESS -->
+    <div id="page-business" class="page">
+        <div class="dashboard-layout">
+            <div class="sidebar" id="businessSidebar">
+                <div class="sidebar-item active" data-sub="biz-dashboard"><i class="fas fa-chart-simple"></i> Дашборд</div>
+                <div class="sidebar-item" data-sub="biz-resources"><i class="fas fa-list"></i> Ресурсы</div>
+                <div class="sidebar-item" data-sub="biz-bookings"><i class="fas fa-book"></i> Бронирования</div>
+                <div class="sidebar-item" data-sub="biz-clients"><i class="fas fa-users"></i> Клиенты</div>
+                <div class="sidebar-item" data-sub="biz-settings"><i class="fas fa-cog"></i> Настройки</div>
+            </div>
+            <div class="content-area" id="businessContent"></div>
+        </div>
+    </div>
+
+    <!-- ADMIN -->
+    <div id="page-admin" class="page">
+        <div class="dashboard-layout">
+            <div class="sidebar" id="adminSidebar">
+                <div class="sidebar-item active" data-sub="admin-types"><i class="fas fa-tags"></i> Типы ресурсов</div>
+                <div class="sidebar-item" data-sub="admin-users"><i class="fas fa-users-cog"></i> Пользователи</div>
+            </div>
+            <div class="content-area" id="adminContent"></div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="quickModal">
+    <div class="modal-box">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3 style="margin-bottom:16px; font-weight:700;"><i class="fas fa-clock" style="color:var(--primary);"></i> Быстрое бронирование</h3>
+        <div id="modalContent"></div>
+    </div>
+</div>
+
+<footer class="footer">BookingPlatform — Современный дизайн © 2026</footer>
+
+<script>
+// ===== MOCK DATA =====
+const categories = ['Врачи','Парикмахерские','Переговорные','Автомобили','Кинотеатры','Спорт'];
+const resources = [
+    { id:1, name:'Клиника Здоровье', category:'Врачи', rating:4.8, location:'Москва, ул. Ленина', price:2500, img:'fa-user-md', capacity:1, description:'Профессиональные врачи', specialists: ['Др. Иванов','Др. Петрова','Др. Сидоров'] },
+    { id:2, name:'Салон Красоты', category:'Парикмахерские', rating:4.6, location:'СПб, Невский', price:1800, img:'fa-cut', capacity:2, description:'Стрижки и окрашивание', specialists: ['Анна','Мария','Елена'] },
+    { id:3, name:'Переговорная А', category:'Переговорные', rating:4.5, location:'Москва, ЦДТ', price:1200, img:'fa-building', capacity:6, description:'Для встреч', specialists: [] },
+    { id:4, name:'Автопрокат', category:'Автомобили', rating:4.3, location:'Москва, аэропорт', price:3500, img:'fa-car', capacity:4, description:'Комфортные авто', specialists: [] },
+    { id:5, name:'Кинотеатр Октябрь', category:'Кинотеатры', rating:4.7, location:'Москва, Арбат', price:600, img:'fa-film', capacity:80, description:'Новинки кино', specialists: [] },
+    { id:6, name:'Фитнес-клуб', category:'Спорт', rating:4.9, location:'Москва, м. Спортивная', price:1500, img:'fa-dumbbell', capacity:10, description:'Тренировки', specialists: ['Тренер Алексей','Тренер Ольга','Тренер Дмитрий'] },
+    { id:7, name:'Центр развития', category:'Образование', rating:4.4, location:'СПб, Васильевский', price:900, img:'fa-graduation-cap', capacity:15, description:'Курсы', specialists: ['Преп. Смирнов','Преп. Козлова'] },
+    { id:8, name:'Консультант Плюс', category:'Консультации', rating:4.2, location:'Москва, онлайн', price:2000, img:'fa-handshake', capacity:1, description:'Юридические консультации', specialists: ['Юрист Павлов','Юрист Соколова'] },
+];
+const servicesMap = {
+    1: ['Прием терапевта', 'УЗИ', 'Анализы'],
+    2: ['Стрижка', 'Окрашивание', 'Укладка'],
+    3: ['Аренда на 2ч', 'Аренда на 4ч'],
+    4: ['Эконом', 'Комфорт'],
+    5: ['Стандарт', 'VIP'],
+    6: ['Персональная', 'Групповая'],
+    7: ['Курс 1 месяц', 'Интенсив'],
+    8: ['Час консультации', 'Пакет 3ч'],
+};
+const bookings = [
+    { id:101, resource:'Клиника Здоровье', specialist:'Др. Иванов', date:'2026-08-12', time:'10:00', status:'Активно', price:2500 },
+    { id:102, resource:'Салон Красоты', specialist:'Анна', date:'2026-08-10', time:'14:00', status:'Завершено', price:1800 },
+    { id:103, resource:'Переговорная А', specialist:'', date:'2026-08-15', time:'09:00', status:'Отменено', price:1200 },
+    { id:104, resource:'Автопрокат', specialist:'', date:'2026-08-20', time:'11:00', status:'Активно', price:3500 },
+    { id:105, resource:'Кинотеатр Октябрь', specialist:'', date:'2026-08-18', time:'19:00', status:'Завершено', price:600 },
+];
+const users = [
+    { id:1, name:'Админ', role:'admin', email:'admin@bp.com', phone:'+7 999 111-22-33' },
+    { id:2, name:'Бизнес', role:'business', email:'biz@bp.com', phone:'+7 999 222-33-44' },
+    { id:3, name:'Клиент', role:'client', email:'client@bp.com', phone:'+7 999 333-44-55' },
+];
+const notifications = [{text:'Новое бронирование'},{text:'Напоминание'},{text:'Скидка 10%'}];
+
+// ===== HELPERS =====
+function getResource(id) { return resources.find(r=>r.id==id); }
+function getCategoryIcon(cat) {
+    const map = {'Врачи':'fa-user-md','Парикмахерские':'fa-cut','Переговорные':'fa-building','Автомобили':'fa-car','Кинотеатры':'fa-film','Спорт':'fa-dumbbell','Образование':'fa-graduation-cap','Консультации':'fa-handshake'};
+    return map[cat] || 'fa-tag';
+}
+function getServices(resId) { return servicesMap[resId] || ['Стандарт']; }
+function getSpecialists(resId) {
+    const r = getResource(resId);
+    return r && r.specialists ? r.specialists : [];
+}
+function hasSpecialists(resId) { return getSpecialists(resId).length > 0; }
+
+// ===== RENDER HOME =====
+function renderHome() {
+    const catGrid = document.getElementById('categoryGrid');
+    catGrid.innerHTML = categories.map(c => `<div class="category-item"><i class="fas ${getCategoryIcon(c)}"></i>${c}</div>`).join('');
+    const popGrid = document.getElementById('popularGrid');
+    popGrid.innerHTML = resources.slice(0,6).map(r => `
+        <div class="card"><div class="card-img"><i class="fas ${r.img}"></i></div>
+        <h4>${r.name}</h4><div class="meta"><span>${r.category}</span> ⭐${r.rating}</div>
+        <div class="flex-between"><span class="price">${r.price}₽</span><button class="btn btn-primary btn-sm" onclick="quickBook(${r.id})">Забронировать</button></div></div>
+    `).join('');
+}
+renderHome();
+
+// ===== CATALOG =====
+let catalogPage = 1;
+function renderCatalog() {
+    const search = document.getElementById('catalogSearch').value.toLowerCase();
+    const cat = document.getElementById('catFilter').value;
+    const min = parseFloat(document.getElementById('priceMin').value) || 0;
+    const max = parseFloat(document.getElementById('priceMax').value) || Infinity;
+    let filtered = resources.filter(r => 
+        r.name.toLowerCase().includes(search) &&
+        (cat==='' || r.category===cat) &&
+        (r.price >= min && r.price <= max)
+    );
+    const perPage = 6;
+    const total = filtered.length;
+    const pages = Math.ceil(total/perPage);
+    if (catalogPage > pages) catalogPage = pages || 1;
+    const start = (catalogPage-1)*perPage;
+    const pageItems = filtered.slice(start, start+perPage);
+    const grid = document.getElementById('catalogGrid');
+    grid.innerHTML = pageItems.map(r => `
+        <div class="card"><div class="card-img"><i class="fas ${r.img}"></i></div>
+        <h4>${r.name}</h4><div class="meta"><span>${r.category}</span> ⭐${r.rating}</div>
+        <div class="text-muted" style="font-size:0.8rem;">${r.location}</div>
+        <div class="flex-between"><span class="price">${r.price}₽</span><button class="btn btn-primary btn-sm" onclick="quickBook(${r.id})">Забронировать</button></div></div>
+    `).join('');
+    document.getElementById('catalogPagination').innerHTML = pages > 1 ? 
+        `<button class="btn btn-ghost btn-sm" onclick="catalogPage=${Math.max(1,catalogPage-1)};renderCatalog()"><i class="fas fa-chevron-left"></i></button>
+         <span style="color:var(--gray-500);font-size:0.9rem;">${catalogPage} / ${pages}</span>
+         <button class="btn btn-ghost btn-sm" onclick="catalogPage=${Math.min(pages,catalogPage+1)};renderCatalog()"><i class="fas fa-chevron-right"></i></button>` : '';
+    const sel = document.getElementById('catFilter');
+    if (sel.options.length <= 1) {
+        sel.innerHTML = '<option value="">Все категории</option>' + categories.map(c => `<option value="${c}">${c}</option>`).join('');
+    }
+}
+function filterCatalog() { catalogPage = 1; renderCatalog(); }
+renderCatalog();
+
+// ===== RESOURCE DETAIL =====
+function renderResourceDetail(id) {
+    const r = getResource(id) || resources[0];
+    const detail = document.getElementById('resourceDetail');
+    const slots = ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00'];
+    const today = new Date();
+    const days = Array.from({length:7}, (_,i) => { const d=new Date(today); d.setDate(today.getDate()+i); return d; });
+    const specs = getSpecialists(r.id);
+    detail.innerHTML = `
+        <div class="card"><div class="card-img" style="height:180px;background:var(--primary-light);"><i class="fas ${r.img}" style="font-size:4.5rem;"></i></div>
+        <h2 style="font-size:1.6rem;">${r.name}</h2>
+        <div class="meta" style="font-size:0.95rem;">${r.category} ⭐${r.rating} • ${r.location}</div>
+        <p style="color:var(--gray-500);">${r.description} • Вместимость: ${r.capacity}</p>
+        <div style="margin:8px 0;"><strong>Услуги:</strong> ${getServices(r.id).join(', ')}</div>
+        ${specs.length ? `<div><strong>Специалисты:</strong> ${specs.join(', ')}</div>` : ''}
+        <div class="mt-12"><strong>Выберите дату:</strong></div>
+        <div class="calendar-grid" id="calendarGrid">
+            ${days.map((d,i) => `<div class="cal-day ${i===0?'selected':''}" data-date="${d.toISOString().slice(0,10)}">${d.getDate()}.${d.getMonth()+1}</div>`).join('')}
+        </div>
+        <div><strong>Доступные слоты:</strong></div>
+        <div class="slot-grid" id="slotGrid">
+            ${slots.map(t => `<span class="slot-btn" data-time="${t}">${t}</span>`).join('')}
+        </div>
+        <button class="btn btn-primary mt-12" onclick="quickBook(${r.id})">Забронировать выбранный слот</button>
+    `;
+    document.querySelectorAll('#calendarGrid .cal-day').forEach(el => {
+        el.onclick = function() { 
+            document.querySelectorAll('#calendarGrid .cal-day').forEach(x=>x.classList.remove('selected'));
+            this.classList.add('selected'); 
+        };
+    });
+    document.querySelectorAll('#slotGrid .slot-btn').forEach(el => {
+        el.onclick = function() {
+            document.querySelectorAll('#slotGrid .slot-btn').forEach(x=>x.classList.remove('selected'));
+            this.classList.add('selected');
+        };
+    });
+    document.querySelectorAll('.main-nav .tab').forEach(t=>t.classList.remove('active'));
+    document.querySelector('.main-nav .tab[data-page="page-resource"]').classList.add('active');
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('page-resource').classList.add('active');
+}
+
+// ===== QUICK BOOK MODAL =====
+function quickBook(id) {
+    const r = getResource(id);
+    const modal = document.getElementById('quickModal');
+    const specs = getSpecialists(r.id);
+    let specHtml = '';
+    if (specs.length) {
+        specHtml = `<div style="margin:8px 0;"><strong>Специалист:</strong></div><div class="specialist-grid">${specs.map(s => `<div class="specialist-item" data-spec="${s}"><span class="s-avatar">${s[0]}</span>${s}</div>`).join('')}</div>`;
+    }
+    document.getElementById('modalContent').innerHTML = `
+        <p><strong>${r.name}</strong> • ${r.category}</p>
+        ${specHtml}
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0;">
+            <div><label style="font-size:0.8rem;color:var(--gray-500);">Дата</label><input type="date" value="2026-08-12" class="form-input"></div>
+            <div><label style="font-size:0.8rem;color:var(--gray-500);">Время</label><select class="form-input">${['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00'].map(t => `<option>${t}</option>`).join('')}</select></div>
+        </div>
+        <p style="font-weight:600;">Цена: ${r.price}₽</p>
+        <input class="form-input" style="margin:4px 0;" placeholder="Имя" value="Клиент">
+        <input class="form-input" style="margin:4px 0;" placeholder="Телефон" value="+7 999 123-45-67">
+        <input class="form-input" style="margin:4px 0;" placeholder="Email" value="client@bp.com">
+        <textarea class="form-input" style="margin:8px 0;resize:vertical;min-height:60px;" placeholder="Комментарий">Окно</textarea>
+        <button class="btn btn-success" style="width:100%;margin-top:4px;" onclick="alert('Бронирование создано!');closeModal();">Забронировать</button>
+    `;
+    document.querySelectorAll('.specialist-item').forEach(el => {
+        el.onclick = function() {
+            document.querySelectorAll('.specialist-item').forEach(x=>x.classList.remove('selected'));
+            this.classList.add('selected');
+        };
+    });
+    modal.classList.add('open');
+}
+function closeModal() { document.getElementById('quickModal').classList.remove('open'); }
+
+// ===== NAVIGATION =====
+document.querySelectorAll('.main-nav .tab').forEach(tab => {
+    tab.onclick = function() {
+        document.querySelectorAll('.main-nav .tab').forEach(t=>t.classList.remove('active'));
+        this.classList.add('active');
+        const pageId = this.dataset.page;
+        document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        if (pageId === 'page-resource') renderResourceDetail(1);
+        if (pageId === 'page-booking') renderBooking();
+        if (pageId === 'page-client') renderClientSub('client-bookings');
+        if (pageId === 'page-business') renderBusinessSub('biz-dashboard');
+        if (pageId === 'page-admin') renderAdminSub('admin-types');
+    };
+});
+
+// ===== BOOKING STEPS =====
+let bookingStep = 1;
+let bookingState = {
+    resourceId: 1,
+    service: '',
+    specialist: '',
+    date: '2026-08-12',
+    time: '10:00'
+};
+
+function renderBooking() {
+    const steps = ['Выбор слота','Данные','Подтверждение','Успех'];
+    const indicator = document.getElementById('stepIndicator');
+    indicator.innerHTML = steps.map((s,i) => `<div class="step-dot ${i+1===bookingStep?'active':i+1<bookingStep?'done':''}"><span class="num">${i+1}</span> ${s}</div>`).join('');
+    const content = document.getElementById('bookingContent');
+    const r = getResource(bookingState.resourceId);
+    const services = getServices(r.id);
+    const slots = ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00'];
+    const specs = getSpecialists(r.id);
+
+    if (bookingStep === 1) {
+        let specHtml = '';
+        if (specs.length) {
+            specHtml = `<div style="margin:8px 0;"><strong>Специалист:</strong></div><div class="specialist-grid" id="bookingSpecGrid">${specs.map(s => `<div class="specialist-item ${s===bookingState.specialist?'selected':''}" data-spec="${s}" onclick="selectBookingSpec('${s}')"><span class="s-avatar">${s[0]}</span>${s}</div>`).join('')}</div>`;
+        }
+        content.innerHTML = `
+            <div class="booking-summary">
+                <h4 style="font-size:1.2rem;margin-bottom:16px;">Шаг 1: Выбор слота</h4>
+                <div class="mb-12"><label style="font-weight:500;color:var(--gray-600);">Ресурс</label>
+                    <select id="bookingResourceSelect" class="form-input" onchange="updateBookingState()">
+                        ${resources.map(rr => `<option value="${rr.id}" ${rr.id===bookingState.resourceId?'selected':''}>${rr.name} (${rr.price}₽)</option>`).join('')}
+                    </select>
+                </div>
+                <div class="mb-12"><label style="font-weight:500;color:var(--gray-600);">Услуга</label>
+                    <select id="bookingServiceSelect" class="form-input" onchange="updateBookingState()">
+                        ${services.map(s => `<option value="${s}" ${s===bookingState.service?'selected':''}>${s}</option>`).join('')}
+                    </select>
+                </div>
+                ${specHtml}
+                <div class="mb-12"><label style="font-weight:500;color:var(--gray-600);">Дата</label>
+                    <input type="date" id="bookingDateInput" class="form-input" value="${bookingState.date}" onchange="updateBookingState()">
+                </div>
+                <div><label style="font-weight:500;color:var(--gray-600);">Время</label></div>
+                <div class="slot-grid" id="bookingSlotGrid">
+                    ${slots.map(t => `<span class="slot-btn ${t===bookingState.time?'selected':''}" data-time="${t}" onclick="selectBookingSlot('${t}')">${t}</span>`).join('')}
+                </div>
+                <button class="btn btn-primary mt-12" onclick="bookingStep=2;renderBooking()">Далее →</button>
+            </div>
+        `;
+        const resSelect = document.getElementById('bookingResourceSelect');
+        if (resSelect) {
+            resSelect.onchange = function() {
+                const newId = parseInt(this.value);
+                bookingState.resourceId = newId;
+                const newR = getResource(newId);
+                const servs = getServices(newR.id);
+                const servSelect = document.getElementById('bookingServiceSelect');
+                servSelect.innerHTML = servs.map(s => `<option value="${s}">${s}</option>`).join('');
+                bookingState.service = servs[0] || '';
+                const newSpecs = getSpecialists(newId);
+                const specGrid = document.getElementById('bookingSpecGrid');
+                if (specGrid && newSpecs.length) {
+                    specGrid.innerHTML = newSpecs.map(s => `<div class="specialist-item" data-spec="${s}" onclick="selectBookingSpec('${s}')"><span class="s-avatar">${s[0]}</span>${s}</div>`).join('');
+                } else if (specGrid) {
+                    specGrid.innerHTML = '';
+                }
+                bookingState.specialist = newSpecs.length ? newSpecs[0] : '';
+                renderBooking();
+            };
+        }
+    } else if (bookingStep === 2) {
+        content.innerHTML = `
+            <div class="booking-summary">
+                <h4 style="font-size:1.2rem;margin-bottom:16px;">Шаг 2: Данные пользователя</h4>
+                <p style="color:var(--gray-500);margin-bottom:16px;"><strong>${r.name}</strong> ${bookingState.service} ${bookingState.specialist ? '• '+bookingState.specialist : ''} • ${bookingState.date} ${bookingState.time} • <strong>${r.price}₽</strong></p>
+                <input class="form-input" style="margin:6px 0;" placeholder="Имя" value="Клиент">
+                <input class="form-input" style="margin:6px 0;" placeholder="Телефон" value="+7 999 333-44-55">
+                <input class="form-input" style="margin:6px 0;" placeholder="Email" value="client@bp.com">
+                <div class="flex-between mt-12"><button class="btn btn-ghost" onclick="bookingStep=1;renderBooking()">← Назад</button><button class="btn btn-primary" onclick="bookingStep=3;renderBooking()">Далее →</button></div>
+            </div>
+        `;
+    } else if (bookingStep === 3) {
+        content.innerHTML = `
+            <div class="booking-summary">
+                <h4 style="font-size:1.2rem;margin-bottom:16px;">Шаг 3: Подтверждение</h4>
+                <div style="background:var(--gray-50);padding:16px;border-radius:var(--radius-sm);margin-bottom:16px;">
+                    <p><strong>${r.name}</strong> • ${bookingState.service} ${bookingState.specialist ? '• '+bookingState.specialist : ''}</p>
+                    <p>${bookingState.date} ${bookingState.time} • <strong>${r.price}₽</strong></p>
+                    <p style="color:var(--gray-500);font-size:0.9rem;">Клиент, +7 999 333-44-55, client@bp.com</p>
+                </div>
+                <div class="flex-between"><button class="btn btn-ghost" onclick="bookingStep=2;renderBooking()">← Назад</button><button class="btn btn-success" onclick="bookingStep=4;renderBooking()">Подтвердить</button></div>
+            </div>
+        `;
+    } else if (bookingStep === 4) {
+        content.innerHTML = `
+            <div class="booking-summary text-center">
+                <div style="font-size:3rem;margin-bottom:8px;">✅</div>
+                <h4 style="font-size:1.4rem;">Бронирование подтверждено!</h4>
+                <p style="color:var(--gray-500);">Номер: #BP-${Math.floor(1000+Math.random()*9000)}</p>
+                <button class="btn btn-primary mt-12" onclick="bookingStep=1;renderBooking();document.querySelector('.main-nav .tab[data-page=\\'page-home\\']').click();">На главную</button>
+            </div>
+        `;
+    }
+}
+
+function updateBookingState() {
+    const resSelect = document.getElementById('bookingResourceSelect');
+    const servSelect = document.getElementById('bookingServiceSelect');
+    const dateInput = document.getElementById('bookingDateInput');
+    if (resSelect) bookingState.resourceId = parseInt(resSelect.value);
+    if (servSelect) bookingState.service = servSelect.value;
+    if (dateInput) bookingState.date = dateInput.value;
+    document.querySelectorAll('#bookingSlotGrid .slot-btn').forEach(el => {
+        el.classList.toggle('selected', el.dataset.time === bookingState.time);
+    });
+}
+
+function selectBookingSlot(time) {
+    bookingState.time = time;
+    document.querySelectorAll('#bookingSlotGrid .slot-btn').forEach(el => {
+        el.classList.toggle('selected', el.dataset.time === time);
+    });
+}
+function selectBookingSpec(spec) {
+    bookingState.specialist = spec;
+    document.querySelectorAll('#bookingSpecGrid .specialist-item').forEach(el => {
+        el.classList.toggle('selected', el.dataset.spec === spec);
+    });
+}
+renderBooking();
+
+// ===== CLIENT SUBS =====
+function renderClientSub(sub) {
+    const content = document.getElementById('clientContent');
+    document.querySelectorAll('#clientSidebar .sidebar-item').forEach(el=>el.classList.remove('active'));
+    document.querySelector(`#clientSidebar .sidebar-item[data-sub="${sub}"]`)?.classList.add('active');
+    if (sub === 'client-bookings') {
+        let rows = bookings.map(b => `<tr><td><strong>${b.resource}</strong></td><td>${b.specialist||'—'}</td><td>${b.date}</td><td>${b.time}</td><td><span class="tag ${b.status==='Активно'?'tag-success':b.status==='Отменено'?'tag-danger':'tag-warning'}">${b.status}</span></td><td>${b.price}₽</td></tr>`).join('');
+        content.innerHTML = `<div class="table-wrap"><table><tr><th>Ресурс</th><th>Специалист</th><th>Дата</th><th>Время</th><th>Статус</th><th>Цена</th></tr>${rows}</table></div>`;
+    } else if (sub === 'client-profile') {
+        content.innerHTML = `<div class="card"><h4 style="margin-bottom:12px;">Мои данные</h4><input class="form-input" style="margin:6px 0;" value="Клиент"><input class="form-input" style="margin:6px 0;" value="client@bp.com"><input class="form-input" style="margin:6px 0;" value="+7 999 333-44-55"><button class="btn btn-primary mt-12">Сохранить</button></div>`;
+    } else if (sub === 'client-notifications') {
+        content.innerHTML = `<div class="card"><h4 style="margin-bottom:12px;">Настройки уведомлений</h4><label style="display:flex;align-items:center;gap:10px;margin:6px 0;"><input type="checkbox" checked style="width:18px;height:18px;"> Email</label><label style="display:flex;align-items:center;gap:10px;margin:6px 0;"><input type="checkbox" checked style="width:18px;height:18px;"> SMS</label><label style="display:flex;align-items:center;gap:10px;margin:6px 0;"><input type="checkbox" style="width:18px;height:18px;"> Push</label></div>`;
+    }
+}
+renderClientSub('client-bookings');
+
+// ===== BUSINESS SUBS =====
+function renderBusinessSub(sub) {
+    const content = document.getElementById('businessContent');
+    document.querySelectorAll('#businessSidebar .sidebar-item').forEach(el=>el.classList.remove('active'));
+    document.querySelector(`#businessSidebar .sidebar-item[data-sub="${sub}"]`)?.classList.add('active');
+    if (sub === 'biz-dashboard') {
+        content.innerHTML = `<div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));"><div class="card"><h3 style="font-size:1.8rem;">12</h3><p class="text-muted">Всего броней</p></div><div class="card"><h3 style="font-size:1.8rem;">45 200₽</h3><p class="text-muted">Доход</p></div><div class="card"><h3 style="font-size:1.8rem;">78%</h3><p class="text-muted">Загрузка</p></div><div class="card"><h3 style="font-size:1.8rem;">24</h3><p class="text-muted">Клиенты</p></div></div>`;
+    } else if (sub === 'biz-resources') {
+        content.innerHTML = `<div class="table-wrap"><table><tr><th>Название</th><th>Категория</th><th>Цена</th><th>Специалисты</th><th>Действия</th></tr>${resources.map(r=>`<tr><td><strong>${r.name}</strong></td><td>${r.category}</td><td>${r.price}₽</td><td>${(r.specialists||[]).join(', ')||'—'}</td><td><button class="btn btn-primary btn-sm">Ред.</button> <button class="btn btn-danger btn-sm">Уд.</button></td></tr>`).join('')}</table><button class="btn btn-primary mt-12">+ Добавить ресурс</button></div>`;
+    } else if (sub === 'biz-bookings') {
+        content.innerHTML = `<div class="table-wrap"><table><tr><th>Клиент</th><th>Ресурс</th><th>Специалист</th><th>Дата</th><th>Статус</th><th>Действия</th></tr>${bookings.map(b=>`<tr><td>Клиент</td><td>${b.resource}</td><td>${b.specialist||'—'}</td><td>${b.date}</td><td><span class="tag ${b.status==='Активно'?'tag-success':b.status==='Отменено'?'tag-danger':'tag-warning'}">${b.status}</span></td><td><button class="btn btn-success btn-sm">✔</button> <button class="btn btn-danger btn-sm">✖</button></td></tr>`).join('')}</table></div>`;
+    } else if (sub === 'biz-clients') {
+        content.innerHTML = `<div class="table-wrap"><table><tr><th>Имя</th><th>Email</th><th>Телефон</th></tr>${users.map(u=>`<tr><td>${u.name}</td><td>${u.email}</td><td>${u.phone}</td></tr>`).join('')}</table></div>`;
+    } else {
+        content.innerHTML = `<div class="card"><h4>Настройки</h4><p class="text-muted">Смена пароля, тарифы и т.д.</p></div>`;
+    }
+}
+renderBusinessSub('biz-dashboard');
+
+// ===== ADMIN SUBS =====
+function renderAdminSub(sub) {
+    const content = document.getElementById('adminContent');
+    document.querySelectorAll('#adminSidebar .sidebar-item').forEach(el=>el.classList.remove('active'));
+    document.querySelector(`#adminSidebar .sidebar-item[data-sub="${sub}"]`)?.classList.add('active');
+    if (sub === 'admin-types') {
+        content.innerHTML = `<div class="table-wrap"><table><tr><th>Категория</th><th>Действия</th></tr>${categories.map(c=>`<tr><td>${c}</td><td><button class="btn btn-primary btn-sm">Ред.</button> <button class="btn btn-danger btn-sm">Уд.</button></td></tr>`).join('')}</table><button class="btn btn-primary mt-12">+ Добавить категорию</button></div>`;
+    } else if (sub === 'admin-users') {
+        content.innerHTML = `<div class="table-wrap"><table><tr><th>Имя</th><th>Роль</th><th>Статус</th><th>Действия</th></tr>${users.map(u=>`<tr><td>${u.name}</td><td>${u.role}</td><td><span class="tag tag-success">Активен</span></td><td><button class="btn btn-primary btn-sm">Ред.</button></td></tr>`).join('')}</table></div>`;
+    }
+}
+renderAdminSub('admin-types');
+
+document.getElementById('notifBadge').textContent = notifications.length;
+
+document.getElementById('globalSearch').addEventListener('input', function() {
+    const q = this.value.toLowerCase();
+    document.querySelectorAll('.card').forEach(card => {
+        const txt = card.textContent.toLowerCase();
+        card.style.display = txt.includes(q) ? '' : 'none';
+    });
+});
+
+document.addEventListener('click', function(e) {
+    if (e.target.closest('.category-item')) {
+        const cat = e.target.closest('.category-item').textContent.trim();
+        document.querySelector('.main-nav .tab[data-page="page-catalog"]').click();
+        document.getElementById('catFilter').value = cat;
+        filterCatalog();
+    }
+});
+
+document.querySelector('.main-nav .tab[data-page="page-resource"]').addEventListener('click', function() { renderResourceDetail(1); });
+</script>
+</body>
+</html>
