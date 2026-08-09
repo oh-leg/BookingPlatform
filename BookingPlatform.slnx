@@ -5,6 +5,7 @@
   </Folder>
   <Folder Name="/src/Services/">
     <Project Path="src/Services/BookingPlatform.BookingService/BookingPlatform.BookingService.csproj" />
+    <Project Path="src/Services/BookingPlatform.FileService/BookingPlatform.FileService.csproj" Id="36bb9ce6-33a5-4057-956b-97f55e6e9a64" />
     <Project Path="src/Services/BookingPlatform.NotificationService/BookingPlatform.NotificationService.csproj" />
     <Project Path="src/Services/BookingPlatform.ResourceService/BookingPlatform.ResourceService.csproj" />
   </Folder>
