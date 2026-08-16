@@ -1,0 +1,5 @@
+Разделение сущностей(что бы не забыть)
+ResourceSchedule -> Проверяет свой собственный интервал
+ResourceOffer -> Проверяет пересечение Schedule одного Offer т.е набором расписаний услуги
+ResourceScheduleOverride -> Проверяет свой собственный период
+Resource / ScheduleService -> Проверяет пересечение Override одного Resource
