@@ -135,3 +135,7 @@ echo -e "🌐 Для доступа к Gateway выполни: ${YELLOW}kubectl 
 echo -e "🔐 Keycloak доступен через Gateway по адресу: ${YELLOW}http://localhost:8080${NC}"
 
 kubectl port-forward -n default service/http-gateway-nginx 8080:80
+
+echo ""
+echo "Нажмите Enter, чтобы закрыть окно..."
+read -p ""
