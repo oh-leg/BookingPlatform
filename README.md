@@ -4,8 +4,6 @@
 BookingPlatform — универсальная платформа для бронирования ресурсов (переговорные, оборудование, специалисты).  
 Построена на микросервисной архитектуре с использованием **.NET 10**, **Docker**, **Kubernetes**, **Keycloak**, **RabbitMQ** и **SignalR**.
 
----
-
 ## Технологический стек
 
 - **Backend:** .NET 10, ASP.NET Core WebAPI, Dapper, MediatR
@@ -17,19 +15,20 @@ BookingPlatform — универсальная платформа для бро�
 - **Контейнеризация:** Docker, Kubernetes
 - **Логирование:** Serilog + Seq
 
----
 
-## Локальный запуск
+## Запуск инфраструктуры
 
-### 1. Запуск инфраструктуры (Docker Compose)
+### Docker Compose
 
 Из корня проекта выполните команду:
 
 ```bash
-# Поднять полностью всю систему в docker:
+# Поднять систему в docker
 docker-compose -f deploy/docker-compose.yml up -d
+```
 
-# Поднять только keycloak для разработки в VS
+```bash
+# Поднять необходимые контейнеры для разработки в VS
 docker-compose --env-file .env.dev -f deploy/docker-compose.yml up -d keycloak-db keycloak redis minio minio-init
 ```
 
@@ -44,45 +43,31 @@ docker-compose --env-file .env.dev -f deploy/docker-compose.yml up -d keycloak-d
 | MinIO Console | `9001` |
 | Gateway(YARP)  | `5000` |
 
-### 2. Настройка Keycloak
+### Kubernetes
+---
+В docker desktop создайте кластер, затем из корня проекта выполните команду:
 
-#### 2.1. Доступ к консоли администратора
+```bash
+# Поднять систему в Kubernetes
+./deploy/k8s/apply-all.sh
+```
 
-Откройте браузер: http://localhost:8080
+для доступа к keycloak выполните команду в отдельном терминале:
+```bash
+kubectl port-forward -n booking service/keycloak 8080:8080
+```
+при необходимости добавьте маршрутизацию в C:\Windows\System32\drivers\etc\hosts: <br/>
+**127.0.0.1 keycloak**
 
-Логин: `admin`  
-Пароль: `admin`
-
-#### 2.2. Создание Realm
-
-1. Наведите курсор на мастера в левом верхнем углу → **"Create Realm"**
-2. Название: `booking-platform`
-3. Нажмите **"Create"**
-
-#### 2.3. Создание клиента (Client)
-
-1. В левом меню выберите **Clients** → **Create Client**
-2. **Client ID:** `booking-api`
-3. **Client Protocol:** `OpenID Connect`
-4. Нажмите **"Next"**
-5. Включите **"Client authentication"** → `ON`
-6. **Valid redirect URIs:** `http://localhost:5000/*`
-7. Нажмите **"Save"**
-8. Перейдите на вкладку **"Credentials"** и скопируйте **Client Secret**
-
-#### 2.4. Создание пользователя
-
-1. В левом меню выберите **Users** → **Create New User**
-2. **Username:** `testuser`
-3. **Email:** `test@example.com`
-4. Нажмите **"Create"**
-5. Перейдите на вкладку **Credentials**, установите пароль (`password`) и снимите галочку **"Temporary"**.
-
+для доступа к API Gateway:
+```bash
+kubectl port-forward -n booking service/gateway-service 5000:8080
+```
 ---
 
-### 3. Проверка работы
+### 2. Проверка работы
 
-#### 3.1. Получение JWT-токена
+#### 2.1. Получение JWT-токена
 
 ```bash
 curl -X POST http://localhost:8080/realms/booking-platform/protocol/openid-connect/token \
@@ -93,22 +78,3 @@ curl -X POST http://localhost:8080/realms/booking-platform/protocol/openid-conne
   -d "password=password" \
   -d "grant_type=password"
   ```
-
-  Сохраните access_token из ответа.
-
-#### 3.2. Проверка Gateway
-
-В браузере GET http://localhost:5000/api/resources/scalar
-предварительно с помощью расширения добавить в заголовки токен
-Authorization: Bearer {ACCESS_TOKEN}
-Получим страницу Scalar сервиса resource-service
-
-### 4. Доступ к MinIO Console
-
-После запуска MinIO, консоль доступна по адресу:
-http://localhost:9001
-
-**Логин:** `minioadmin`  
-**Пароль:** `minioadmin`
-
-В консоли вы можете просматривать загруженные файлы, создавать bucket'ы и управлять доступом.
