@@ -1,0 +1,61 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: app-route
+  namespace: default
+spec:
+  parentRefs:
+    - name: http-gateway
+      kind: Gateway
+  # Без hostnames роут принимает любой Host-заголовок (localhost, 127.0.0.1 и т.д.)
+  rules:
+    # /auth/* -> Keycloak НАПРЯМУЮ через NGF (мимо YARP!): префикс /auth срезается,
+    # и Keycloak получает /realms/... у себя в корне, а рекламирует публичный /auth.
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /auth
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+      backendRefs:
+        - name: keycloak
+          namespace: booking
+          port: 8080
+    # API/служебные пути -> YARP-шлюз (он только проверяет JWT и проксирует в микросервисы)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api
+      backendRefs:
+        - name: gateway-service
+          namespace: booking
+          port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /notificationHub
+      backendRefs:
+        - name: gateway-service
+          namespace: booking
+          port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /health
+      backendRefs:
+        - name: gateway-service
+          namespace: booking
+          port: 8080
+    # Всё остальное -> статика SPA (nginx)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: frontend-service
+          namespace: booking
+          port: 80

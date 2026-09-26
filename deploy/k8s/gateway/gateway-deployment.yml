@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+  namespace: booking
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+      - name: gateway
+        image: deploy-gateway:r3-keyresolver
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        env:
+        - name: KEYCLOAK_HOSTNAME
+          value: "keycloak"
+        - name: KEYCLOAK_ISSUER
+          value: "http://localhost:8080/auth/realms/booking-platform"
+        - name: KEYCLOAK_JWKS
+          value: "http://keycloak:8080/realms/booking-platform/protocol/openid-connect/certs"
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Docker"

@@ -20,4 +20,11 @@
     <ProjectReference Include="..\..\BookingPlatform.Shared\BookingPlatform.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="API\Contracts\" />
+    <Folder Include="API\Controllers\" />
+    <Folder Include="Application\" />
+    <Folder Include="Infrastructure\" />
+  </ItemGroup>
+
 </Project>

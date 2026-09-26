@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  namespace: booking
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+      - name: keycloak
+        image: deploy-keycloak-theme:v8
+        args:
+          - "start-dev"
+          - "--import-realm"
+        ports:
+        - containerPort: 8080
+        env:
+        - name: KC_DB
+          value: "postgres"
+        - name: KC_DB_URL_HOST
+          value: "keycloak-db"
+        - name: KC_DB_URL_DATABASE
+          value: "keycloak"
+        - name: KC_DB_USERNAME
+          value: "keycloak_user"
+        - name: KC_DB_PASSWORD
+          value: "keycloak_password"
+        - name: KC_BOOTSTRAP_ADMIN_USERNAME
+          value: "admin"
+        - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+          value: "admin"
+        # Публичный URL, под которым браузер видит Keycloak через NGINX Gateway:
+        # NGF маршрутизирует /auth/* напрямую в keycloak-сервис (срезая префикс /auth),
+        # поэтому Keycloak рекламирует себя с путём /auth. YARP здесь НЕ участвует.
+        - name: KC_HOSTNAME
+          value: "http://localhost:8080/auth"
+        - name: KC_PROXY_HEADERS
+          value: "xforwarded"
+        volumeMounts:
+        - name: keycloak-realm
+          mountPath: /opt/keycloak/data/import
+      volumes:
+      - name: keycloak-realm
+        configMap:
+          name: keycloak-realm

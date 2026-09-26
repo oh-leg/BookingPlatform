@@ -1,0 +1,16 @@
+# Настройки data-plane NGINX для Gateway http-gateway.
+# ВАЖНО: NginxProxy должен лежать в том же namespace, что и Gateway (тут — default).
+#
+# type: LoadBalancer — Docker Desktop сам публикует такой Service на localhost,
+# поэтому после apply-all.sh приложение доступно на http://localhost:8080
+# без kubectl port-forward. Именно этот адрес прописан в KC_HOSTNAME
+# (deploy/k8s/keycloak/keycloak-deployment.yml) и в redirect URIs Keycloak (deploy/realm.json).
+apiVersion: gateway.nginx.org/v1alpha2
+kind: NginxProxy
+metadata:
+  name: http-gateway-proxy-config
+  namespace: default
+spec:
+  kubernetes:
+    service:
+      type: LoadBalancer

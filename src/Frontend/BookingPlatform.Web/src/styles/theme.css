@@ -1,0 +1,107 @@
+/*
+ * Базовая тема приложения (design tokens).
+ *
+ * Правило проекта: компоненты не задают цвета, отступы, радиусы и типографику
+ * напрямую — они используют только переменные из этого файла. Благодаря этому
+ * новая тема (тёмная, корпоративная, высококонтрастная) добавляется
+ * переопределением значений токенов, без правок разметки и CSS модулей.
+ *
+ * Активная тема выставляется атрибутом data-theme на <html> (см. src/lib/theme.ts).
+ */
+
+:root {
+  color-scheme: light;
+
+  /* --- Типографика --- */
+  --font-family-base: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  --font-family-mono: 'Cascadia Mono', 'JetBrains Mono', Consolas, 'Courier New', monospace;
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.75rem;
+  --font-size-2xl: 2.25rem;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  --line-height-tight: 1.25;
+  --line-height-base: 1.6;
+
+  --letter-spacing-label: 0.08em;
+
+  /* --- Ритм (шаг 4px) --- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+
+  /* --- Геометрия --- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  --container-max-width: 48rem;
+
+  /* --- Цвета: светлая тема --- */
+  --color-bg: #f4f6fb;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f0f2f7;
+  --color-border: #d8dde8;
+  --color-border-strong: #b9c1d4;
+
+  --color-text: #1b2130;
+  --color-text-muted: #5b6478;
+
+  --color-primary: #2f5fe0;
+  --color-primary-hover: #2549b5;
+  --color-primary-active: #1d3a91;
+  --color-on-primary: #ffffff;
+
+  --color-danger: #b3261e;
+  --color-danger-surface: #fdecea;
+  --color-danger-surface-hover: #f8d9d5;
+  --color-danger-border: #f0c2bd;
+
+  --color-focus-ring: #2f5fe0;
+
+  /* --- Шкала теней и анимации --- */
+  --shadow-sm: 0 1px 2px rgb(16 24 40 / 6%), 0 1px 3px rgb(16 24 40 / 8%);
+  --shadow-md: 0 8px 24px rgb(16 24 40 / 10%);
+
+  --transition-fast: 120ms ease;
+}
+
+/* Тёмная тема: переопределяются только значения токенов. */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-bg: #0f131b;
+  --color-surface: #171d28;
+  --color-surface-muted: #10151d;
+  --color-border: #2b3446;
+  --color-border-strong: #3b465c;
+
+  --color-text: #e7ecf5;
+  --color-text-muted: #9aa5bb;
+
+  --color-primary: #6f95ff;
+  --color-primary-hover: #8aa9ff;
+  --color-primary-active: #a6beff;
+  --color-on-primary: #0f131b;
+
+  --color-danger: #ff9d95;
+  --color-danger-surface: #3a1f1d;
+  --color-danger-surface-hover: #4a2724;
+  --color-danger-border: #6b332e;
+
+  --color-focus-ring: #8aa9ff;
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 40%), 0 1px 3px rgb(0 0 0 / 30%);
+  --shadow-md: 0 8px 24px rgb(0 0 0 / 45%);
+}
