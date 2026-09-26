@@ -18,4 +18,8 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Services\BookingPlatform.ResourceService\BookingPlatform.ResourceService.csproj" />
+  </ItemGroup>
+
 </Project>

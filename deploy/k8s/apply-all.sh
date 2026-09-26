@@ -8,6 +8,9 @@ echo "🚀 Начинаем развертывание Booking Platform в Kuber
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEPLOY_FOLDER="$(dirname "$SCRIPT_DIR")"
 
+echo "SCRIPT_DIR: $SCRIPT_DIR"
+echo "DEPLOY_FOLDER: $DEPLOY_FOLDER"
+
 # Цвета для вывода
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
