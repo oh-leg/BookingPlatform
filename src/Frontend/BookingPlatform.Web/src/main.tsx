@@ -1,6 +1,11 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
+import { initTheme } from './lib/theme';
+import './index.css';
+
+// Тема выставляется до первого рендера, чтобы не было вспышки чужих стилей.
+initTheme();
 
 const container = document.getElementById('root');
 if (!container) {

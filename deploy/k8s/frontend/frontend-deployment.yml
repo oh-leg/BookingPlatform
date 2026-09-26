@@ -21,7 +21,7 @@ spec:
         #   kubectl apply -f deploy/k8s/frontend/frontend-deployment.yml
         # Одного и того же тега недостаточно: при imagePullPolicy: IfNotPresent
         # узел берёт уже закэшированный в нём образ и остаётся на старой сборке.
-        image: deploy-frontend:web2
+        image: deploy-frontend:web3
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80

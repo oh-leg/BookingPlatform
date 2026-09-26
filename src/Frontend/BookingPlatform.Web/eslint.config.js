@@ -17,6 +17,18 @@ export default tseslint.config(
     languageOptions: {
       ecmaVersion: 2022,
       globals: globals.browser
+    },
+    rules: {
+      // Правило проекта: оформление задаётся классами (CSS Modules + токены темы),
+      // а не атрибутом style в разметке.
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'JSXAttribute[name.name="style"]',
+          message:
+            'Инлайн-стили запрещены: используйте классы CSS Modules и токены темы (src/styles/theme.css).'
+        }
+      ]
     }
   },
   {

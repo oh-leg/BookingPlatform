@@ -1,0 +1,8 @@
+/* Оболочка приложения: контент по центру, фон и типографика — из base.css. */
+
+.shell {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-7) var(--space-4) var(--space-6);
+}
