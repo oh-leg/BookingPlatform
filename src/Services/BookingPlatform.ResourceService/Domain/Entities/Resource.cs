@@ -2,8 +2,8 @@ namespace BookingPlatform.ResourceService.Domain.Entities;
 
 public sealed class Resource
 {
-    private readonly List<ResourceOffer> _offers = [];
-    private readonly List<ResourceScheduleOverride> _scheduleOverrides = [];
+    private List<ResourceOffer> _offers = [];
+    private List<ResourceScheduleOverride> _scheduleOverrides = [];
 
     /* Конструктор для создания Resource из MongoDB */
     private Resource()
@@ -13,7 +13,7 @@ public sealed class Resource
 
     public Guid Id { get; private set; }
 
-    public Guid ResourceTypeId { get; private set; }
+    public ResourceType ResourceType { get; private set; } = null!;
 
     public string Name { get; private set; } = null!;
 
@@ -23,7 +23,7 @@ public sealed class Resource
 
     public int? Capacity { get; private set; }
 
-    public Dictionary<string, object>? Metadata { get; private set; }
+    public Dictionary<string, string>? Metadata { get; private set; }
 
     public bool IsActive { get; private set; }
 
@@ -35,18 +35,18 @@ public sealed class Resource
 
     public Resource(
         Guid id,
-        Guid resourceTypeId,
+        ResourceType resourceType,
         string name,
         string? description = null,
         string? location = null,
         int? capacity = null,
-        Dictionary<string, object>? metadata = null)
+        Dictionary<string, string>? metadata = null)
     {
         if (id == Guid.Empty)
             throw new ArgumentException("Идентификатор ресурса не может быть пустым.", nameof(id));
 
-        if (resourceTypeId == Guid.Empty)
-            throw new ArgumentException("Идентификатор типа ресурса не может быть пустым.", nameof(resourceTypeId));
+        if (resourceType is null)
+            throw new ArgumentException("Идентификатор типа ресурса не может быть пустым.", nameof(resourceType));
 
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Наименование ресурса не может быть пустым.", nameof(name));
@@ -55,7 +55,7 @@ public sealed class Resource
             throw new ArgumentException("Емкость ресурса должна быть больше нуля.", nameof(capacity));
 
         Id = id;
-        ResourceTypeId = resourceTypeId;
+        ResourceType = resourceType;
         Name = name.Trim();
         Description = description?.Trim();
         Location = location?.Trim();
@@ -91,7 +91,7 @@ public sealed class Resource
         Capacity = capacity;
     }
 
-    public void UpdateMetadata(Dictionary<string, object>? metadata)
+    public void UpdateMetadata(Dictionary<string, string>? metadata)
     {
         Metadata = metadata;
     }
@@ -118,6 +118,14 @@ public sealed class Resource
 
         _offers.Add(offer);
     }
+    public void AddOfferSchedule(Guid offerId, ResourceSchedule schedule)
+    {
+        var offer = _offers.FirstOrDefault(x => x.Id == offerId)
+            ?? throw new InvalidOperationException("Услуга не найдена.");
+
+        offer.AddSchedule(schedule);
+    }
+
 /*Добавление исключения расписания услуги с проверкой на пересечение*/
     public void AddScheduleOverride(ResourceScheduleOverride scheduleOverride)
     {
