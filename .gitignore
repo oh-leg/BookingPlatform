@@ -427,3 +427,10 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Frontend SPA (Vite + TypeScript)
+dist/
+.vite/
+*.tsbuildinfo
+.eslintcache
+/.dsh/rollback
