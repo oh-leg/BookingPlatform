@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: keycloak
-        image: keycloak/keycloak:26.0.0
+        image: deploy-keycloak-theme:v8
         args:
           - "start-dev"
           - "--import-realm"
@@ -36,8 +36,13 @@ spec:
           value: "admin"
         - name: KC_BOOTSTRAP_ADMIN_PASSWORD
           value: "admin"
+        # Публичный URL, под которым браузер видит Keycloak через NGINX Gateway:
+        # NGF маршрутизирует /auth/* напрямую в keycloak-сервис (срезая префикс /auth),
+        # поэтому Keycloak рекламирует себя с путём /auth. YARP здесь НЕ участвует.
         - name: KC_HOSTNAME
-          value: "keycloak"
+          value: "http://localhost:8080/auth"
+        - name: KC_PROXY_HEADERS
+          value: "xforwarded"
         volumeMounts:
         - name: keycloak-realm
           mountPath: /opt/keycloak/data/import

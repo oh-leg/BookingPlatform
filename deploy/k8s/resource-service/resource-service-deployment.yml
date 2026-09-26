@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: resource-service
-        image: deploy-resource-service:latest
+        image: deploy-resource-service:r1-testdata
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080

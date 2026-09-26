@@ -52,18 +52,54 @@ docker-compose --env-file .env.dev -f deploy/docker-compose.yml up -d keycloak-d
 ./deploy/k8s/apply-all.sh
 ```
 
-для доступа к keycloak выполните команду в отдельном терминале:
+После этого приложение доступно по адресу **http://localhost:8080** — `kubectl port-forward` не нужен:
+data-plane сервис NGF (`http-gateway-nginx`) объявлен как `LoadBalancer` (см. `deploy/k8s/ingress/nginx-proxy.yml`),
+и Docker Desktop сам публикует его на localhost. Проверить можно так:
+
 ```bash
-kubectl port-forward -n booking service/keycloak 8080:8080
+kubectl -n default get svc http-gateway-nginx   # TYPE=LoadBalancer, EXTERNAL-IP заполнен
 ```
+
+| Что | Адрес |
+| :--- | :--- |
+| SPA (frontend) | `http://localhost:8080` |
+| Keycloak (и admin console `/auth/admin`) | `http://localhost:8080/auth` |
+| API через YARP | `http://localhost:8080/api/...` |
+
+Если нужен прямой доступ к сервисам мимо Gateway, используйте port-forward на свободные порты
+(порт 8080 занят LoadBalancer'ом):
+
+```bash
+kubectl port-forward -n booking service/keycloak 8081:8080       # Keycloak напрямую
+kubectl port-forward -n booking service/gateway-service 5000:8080 # YARP напрямую
+```
+
+> ⚠️ Порт 8080 на хосте занимает LoadBalancer-сервис Gateway, поэтому не поднимайте
+> одновременно docker-compose стек (там Keycloak тоже проброшен на 8080) — будет конфликт портов.
+> Если в вашем кластере нет LB-контроллера (`EXTERNAL-IP` = `<pending>`), вернитесь к
+> `kubectl port-forward -n default service/http-gateway-nginx 8080:8080`.
+
 при необходимости добавьте маршрутизацию в C:\Windows\System32\drivers\etc\hosts: <br/>
 **127.0.0.1 keycloak**
-
-для доступа к API Gateway:
-```bash
-kubectl port-forward -n booking service/gateway-service 5000:8080
-```
 ---
+
+### Обновление фронтенда после правок в коде
+
+Кластер раздаёт SPA из собранного образа, поэтому изменения в
+`src/Frontend/BookingPlatform.Web` нужно пересобрать в образ и перекатить:
+
+```bash
+# 1. поднимите номер тега в deploy/k8s/frontend/frontend-deployment.yml (web1 -> web2)
+# 2. соберите образ с этим тегом (внутри образа выполняется npm ci + tsc + vite build)
+docker build -t deploy-frontend:web2 src/Frontend/BookingPlatform.Web
+# 3. примените манифест — поднимется под со свежим образом
+kubectl apply -f deploy/k8s/frontend/frontend-deployment.yml
+```
+
+> ⚠️ Пересборка с **тем же** тегом не обновит кластер: при `imagePullPolicy: IfNotPresent`
+> узел использует уже закэшированный образ. Всегда поднимайте версию тега.
+> Быстрая проверка, что отдаётся новая сборка: `curl -s http://localhost:8080/ | grep assets/index`
+> — имя файла бандла содержит хеш содержимого и меняется при каждой правке.
 
 ### 2. Проверка работы
 

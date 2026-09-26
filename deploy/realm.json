@@ -2,7 +2,36 @@
   "realm": "booking-platform",
   "enabled": true,
   "displayName": "Booking Platform",
+  "loginTheme": "booking",
   "clients": [
+    {
+      "clientId": "booking-spa",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": ["http://localhost:8080/*", "http://127.0.0.1:8080/*"],
+      "webOrigins": ["http://localhost:8080", "http://127.0.0.1:8080"],
+      "protocol": "openid-connect",
+      "defaultClientScopes": ["openid", "profile", "email", "roles"],
+      "optionalClientScopes": ["address", "phone", "offline_access", "microprofile-jwt"],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:8080/*"
+      },
+      "protocolMappers": [
+        {
+          "name": "audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.client.audience": "booking-api",
+            "id.token.claim": "true",
+            "access.token.claim": "true"
+          }
+        }
+      ]
+    },
     {
       "clientId": "booking-api",
       "enabled": true,

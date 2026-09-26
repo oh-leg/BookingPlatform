@@ -1,0 +1,20 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: ReferenceGrant
+metadata:
+  name: allow-gateway-to-booking
+  namespace: booking
+spec:
+  from:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      namespace: default
+  to:
+    - group: ""
+      kind: Service
+      name: gateway-service
+    - group: ""
+      kind: Service
+      name: frontend-service
+    - group: ""
+      kind: Service
+      name: keycloak

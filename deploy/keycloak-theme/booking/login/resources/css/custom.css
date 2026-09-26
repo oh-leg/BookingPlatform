@@ -1,0 +1,306 @@
+/* ============================================================
+   Booking Platform — кастомная тема страницы входа
+   Наследует keycloak.v2; светлая тема в духе Vite.
+   ============================================================ */
+
+/* Светлый фон с мягкими радиальными градиентами Vite */
+body {
+    background: radial-gradient(circle at 15% 10%, rgba(168, 88, 255, 0.18) 0%, rgba(168, 88, 255, 0) 45%), radial-gradient(circle at 90% 90%, rgba(65, 209, 255, 0.15) 0%, rgba(65, 209, 255, 0) 40%), linear-gradient(135deg, #f8fafc 0%, #eef2ff 55%, #e0e7ff 130%) fixed !important;
+    color: #0f172a;
+}
+
+.pf-v5-c-login__container {
+    max-width: 460px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Бренд в шапке — фирменный градиент Vite, без иконки и жирности */
+#kc-header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0;
+}
+
+#kc-header-wrapper.pf-v5-c-brand {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #a858ff, #41d1ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: #0f172a !important;
+    text-shadow: none;
+    margin-bottom: 1em;
+}
+
+    /* Убираем дефолтную иконку-«B» */
+    #kc-header-wrapper.pf-v5-c-brand::before {
+        content: none;
+    }
+
+/* Карточка логина — светлая */
+.pf-v5-c-login__main {
+    border-radius: 24px;
+    background: #ffffff;
+    box-shadow: 0 20px 50px -12px rgba(15, 23, 42, 0.15), 0 0 0 1px rgba(15, 23, 42, 0.04) inset;
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    position: relative;
+    overflow: hidden;
+}
+
+    /* Тонкая градиентная полоска сверху — фирменный акцент Vite */
+    .pf-v5-c-login__main::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #a858ff, #41d1ff, #a858ff);
+        background-size: 200% 100%;
+        animation: vite-shimmer 3s linear infinite;
+    }
+
+@keyframes vite-shimmer {
+    0% {
+        background-position: 0% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Заголовок — без жирности */
+#kc-page-title {
+    color: #0f172a;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    font-size: 1.35rem;
+}
+
+/* Метки полей */
+.pf-v5-c-form__label-text {
+    color: #475569;
+    font-weight: 500;
+}
+
+/* Обёртка поля — светлая */
+.pf-v5-c-form-control {
+    border: none !important;
+    background: #f8fafc !important;
+    border-radius: 14px;
+    box-shadow: none;
+    position: relative;
+    transition: background 0.25s ease;
+}
+
+    /* Псевдоэлемент, который рисует рамку в PatternFly 5 */
+    .pf-v5-c-form-control::before,
+    .pf-v5-c-form-control::after {
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 14px !important;
+        transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        pointer-events: none;
+    }
+
+    /* Hover */
+    .pf-v5-c-form-control:hover::after {
+        border-color: #cbd5e1 !important;
+    }
+
+    /* Focus — фиолетовая рамка */
+    .pf-v5-c-form-control:focus-within::after,
+    .pf-v5-c-form-control.pf-m-focus::after {
+        border-color: #a858ff !important;
+        box-shadow: 0 0 0 4px rgba(168, 88, 255, 0.15);
+    }
+
+    .pf-v5-c-form-control:focus-within {
+        background: #ffffff !important;
+    }
+
+    /* Сам инпут — без рамок */
+    .pf-v5-c-form-control input {
+        border: none !important;
+        outline: none !important;
+        background: transparent !important;
+        color: #0f172a;
+        box-shadow: none !important;
+        font-family: inherit;
+    }
+
+        .pf-v5-c-form-control input::placeholder {
+            color: #94a3b8;
+        }
+
+        /* Автозаполнение — светлый фон */
+        .pf-v5-c-form-control input:-webkit-autofill,
+        .pf-v5-c-form-control input:-webkit-autofill:hover,
+        .pf-v5-c-form-control input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #0f172a;
+            -webkit-box-shadow: 0 0 0 1000px #f8fafc inset !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        /* Убираем стандартный outline от браузера */
+        .pf-v5-c-form-control input:focus,
+        .pf-v5-c-form-control input:focus-visible {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+/* CSS-переменные PatternFly — светлая палитра */
+:root,
+.pf-v5-c-form-control {
+    --pf-v5-c-form-control--BorderColor: #e2e8f0;
+    --pf-v5-c-form-control--hover--BorderColor: #cbd5e1;
+    --pf-v5-c-form-control--focus--BorderColor: #a858ff;
+    --pf-v5-c-form-control--m-placeholder--BorderColor: #e2e8f0;
+    --pf-v5-c-form-control--BackgroundColor: #f8fafc;
+}
+
+/* ============================================================
+   Убираем кнопку «Показать/Скрыть» пароль
+   ============================================================ */
+
+/* Кнопка показа пароля в Keycloak */
+.pf-v5-c-button.pf-m-control,
+#password-show-hide,
+button[aria-label*="пароль"],
+button[aria-label*="password"],
+button[aria-label*="Show"],
+button[aria-label*="Hide"] {
+    display: none !important;
+}
+
+/* Скрываем группу, если она содержит только кнопку показа пароля */
+.pf-v5-c-input-group__item.pf-m-fill ~ .pf-v5-c-input-group__item:not(.pf-m-fill) {
+    display: none !important;
+}
+
+/* Кнопка входа — фирменный градиент Vite */
+#kc-login {
+    background: linear-gradient(135deg, #a858ff, #41d1ff);
+    border: none;
+    border-radius: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    letter-spacing: 0.01em;
+    box-shadow: 0 8px 20px -6px rgba(168, 88, 255, 0.45);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+    #kc-login:hover {
+        background: linear-gradient(135deg, #b56dff, #5cd7ff);
+        transform: translateY(-1px);
+        box-shadow: 0 15px 30px -8px rgba(168, 88, 255, 0.6);
+    }
+
+    #kc-login:active {
+        transform: translateY(0);
+        box-shadow: 0 5px 15px -5px rgba(168, 88, 255, 0.5);
+    }
+
+/* Ссылки */
+.pf-v5-c-button.pf-m-link {
+    color: #7c3aed;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+    .pf-v5-c-button.pf-m-link:hover {
+        color: #a858ff;
+    }
+
+/* Чекбокс «Запомнить меня» */
+.pf-v5-c-check__input:checked ~ .pf-v5-c-check__label {
+    color: #0f172a;
+}
+
+.pf-v5-c-check__input:checked {
+    accent-color: #a858ff;
+}
+
+/* Сообщения об ошибках */
+.pf-v5-c-alert.pf-m-danger {
+    border-radius: 12px;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    color: #b91c1c;
+}
+
+.pf-v5-c-alert.pf-m-warning {
+    border-radius: 12px;
+    background: rgba(251, 191, 36, 0.1);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    color: #b45309;
+}
+
+.pf-v5-c-alert.pf-m-success {
+    border-radius: 12px;
+    background: rgba(34, 197, 94, 0.08);
+    border: 1px solid rgba(34, 197, 94, 0.25);
+    color: #15803d;
+}
+
+.pf-v5-c-alert.pf-m-info {
+    border-radius: 12px;
+    background: rgba(65, 209, 255, 0.1);
+    border: 1px solid rgba(65, 209, 255, 0.3);
+    color: #0369a1;
+}
+
+/* Вторичный текст (подписи, подсказки) */
+.pf-v5-c-helper-text,
+.pf-v5-c-form__helper-text {
+    color: #64748b;
+}
+
+/* Identity Providers (кнопки соцсетей) — светлые */
+.pf-v5-c-login__main-footer-band,
+#kc-social-providers ul li a {
+    border-radius: 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #334155;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+    #kc-social-providers ul li a:hover {
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+        transform: translateY(-1px);
+    }
+
+/* Разделитель */
+#kc-social-providers h2,
+.pf-v5-c-divider {
+    color: #94a3b8;
+}
+
+/* Ссылки под формой (регистрация и т.п.) */
+#kc-registration,
+#kc-registration a,
+#kc-form-options a {
+    color: #7c3aed;
+    font-weight: 500;
+}
+
+    #kc-registration a:hover,
+    #kc-form-options a:hover {
+        color: #a858ff;
+    }
+
+/* Отключаем зачёркивание у ссылок */
+a {
+    text-decoration: none;
+}
