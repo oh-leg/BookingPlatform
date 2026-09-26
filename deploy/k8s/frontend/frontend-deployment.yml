@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: booking
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        # Образ собирается из SPA (Vite + TypeScript):
+        #   docker build -t deploy-frontend:web2 src/Frontend/BookingPlatform.Web
+        # ВАЖНО: при обновлении кода поднимайте номер тега (web1 -> web2) и применяйте манифест:
+        #   kubectl apply -f deploy/k8s/frontend/frontend-deployment.yml
+        # Одного и того же тега недостаточно: при imagePullPolicy: IfNotPresent
+        # узел берёт уже закэшированный в нём образ и остаётся на старой сборке.
+        image: deploy-frontend:web2
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80

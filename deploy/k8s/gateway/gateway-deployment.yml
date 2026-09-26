@@ -15,12 +15,16 @@ spec:
     spec:
       containers:
       - name: gateway
-        image: deploy-gateway:latest
+        image: deploy-gateway:r3-keyresolver
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
         env:
         - name: KEYCLOAK_HOSTNAME
           value: "keycloak"
+        - name: KEYCLOAK_ISSUER
+          value: "http://localhost:8080/auth/realms/booking-platform"
+        - name: KEYCLOAK_JWKS
+          value: "http://keycloak:8080/realms/booking-platform/protocol/openid-connect/certs"
         - name: ASPNETCORE_ENVIRONMENT
           value: "Docker"

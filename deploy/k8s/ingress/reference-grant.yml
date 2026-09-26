@@ -12,3 +12,9 @@ spec:
     - group: ""
       kind: Service
       name: gateway-service
+    - group: ""
+      kind: Service
+      name: frontend-service
+    - group: ""
+      kind: Service
+      name: keycloak

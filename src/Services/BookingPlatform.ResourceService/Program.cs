@@ -42,9 +42,22 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast");
 
+// Тестовый эндпоинт для SPA: доступен только после аутентификации на YARP-шлюзе
+// (шлюз срезает /api/resources и проксирует запрос сюда как /test-data).
+app.MapGet("/test-data", () => Results.Ok(new[]
+    {
+        new TestResource(1, "Переговорная «Альфа»", "room", true),
+        new TestResource(2, "Проектор EPSON EB-X41", "equipment", true),
+        new TestResource(3, "Иван Петров — DevOps-инженер", "specialist", false),
+        new TestResource(4, "Переговорная «Бета»", "room", true)
+    }))
+    .WithName("GetTestData");
+
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
+
+record TestResource(int Id, string Name, string Type, bool Available);

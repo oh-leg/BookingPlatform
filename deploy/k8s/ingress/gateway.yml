@@ -5,9 +5,19 @@ metadata:
   namespace: default
 spec:
   gatewayClassName: nginx
+  # Ссылка на настройки data-plane (deploy/k8s/ingress/nginx-proxy.yml):
+  # именно там Service переключается в тип LoadBalancer, который Docker Desktop
+  # публикует на localhost — тогда port-forward не нужен.
+  infrastructure:
+    parametersRef:
+      group: gateway.nginx.org
+      kind: NginxProxy
+      name: http-gateway-proxy-config
   listeners:
+    # Порт слушателя = порт публикации: наружу торчит localhost:8080,
+    # как и ожидают Keycloak (KC_HOSTNAME) и SPA (window.location.origin).
     - name: http
-      port: 80
+      port: 8080
       protocol: HTTP
       allowedRoutes:
         namespaces:

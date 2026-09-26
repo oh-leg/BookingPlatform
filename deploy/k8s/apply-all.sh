@@ -71,7 +71,7 @@ kubectl apply -f "$SCRIPT_DIR/keycloak/keycloak-deployment.yml"
 kubectl apply -f "$SCRIPT_DIR/keycloak/keycloak-service.yml"
 
 # ----------------------------------------------------------------------
-# 6. Микросервисы (Gateway, Resource, Booking, Notification, File)
+# 6. Микросервисы (Gateway, Resource, Booking, Notification, File) + Frontend
 # ----------------------------------------------------------------------
 echo -e "${YELLOW}⚙️ Развертывание микросервисов...${NC}"
 kubectl apply -f "$SCRIPT_DIR/gateway/gateway-deployment.yml"
@@ -88,6 +88,9 @@ kubectl apply -f "$SCRIPT_DIR/notification-service/notification-service-service.
 
 kubectl apply -f "$SCRIPT_DIR/file-service/file-service-deployment.yml"
 kubectl apply -f "$SCRIPT_DIR/file-service/file-service-service.yml"
+
+kubectl apply -f "$SCRIPT_DIR/frontend/frontend-deployment.yml"
+kubectl apply -f "$SCRIPT_DIR/frontend/frontend-service.yml"
 
 # ----------------------------------------------------------------------
 # 7. NGINX Gateway Fabric (установка через манифест nodeport)
@@ -108,6 +111,7 @@ fi
 # ----------------------------------------------------------------------
 echo -e "${YELLOW}📡 Настройка Gateway API...${NC}"
 kubectl apply -f "$SCRIPT_DIR/ingress/reference-grant.yml"
+kubectl apply -f "$SCRIPT_DIR/ingress/nginx-proxy.yml"
 kubectl apply -f "$SCRIPT_DIR/ingress/gateway.yml"
 kubectl apply -f "$SCRIPT_DIR/ingress/httproute.yml"
 
@@ -129,13 +133,15 @@ kubectl get pods -n nginx-gateway
 echo -e "${GREEN}✅ Статус сервисов:${NC}"
 kubectl get services -n booking
 
+echo -e "${GREEN}✅ Публикация Gateway (LoadBalancer):${NC}"
+kubectl get service http-gateway-nginx -n default
+
 echo ""
 echo -e "${GREEN}🎉 Развертывание завершено!${NC}"
-echo -e "🌐 Для доступа к Gateway выполни: ${YELLOW}kubectl port-forward -n default service/http-gateway-nginx 8080:80${NC}"
-echo -e "🔐 Keycloak доступен через Gateway по адресу: ${YELLOW}http://localhost:8080${NC}"
-
-kubectl port-forward -n default service/http-gateway-nginx 8080:80
-
+echo -e "🌐 Приложение: ${YELLOW}http://localhost:8080${NC} — Service http-gateway-nginx имеет тип LoadBalancer,"
+echo -e "   Docker Desktop публикует его на localhost сам, port-forward НЕ нужен"
+echo -e "🔐 Keycloak доступен через Gateway по адресу: ${YELLOW}http://localhost:8080/auth${NC}"
+echo -e "ℹ️  Проверка публикации: ${YELLOW}kubectl -n default get svc http-gateway-nginx${NC} (TYPE=LoadBalancer, EXTERNAL-IP заполнен)"
 echo ""
 echo "Нажмите Enter, чтобы закрыть окно..."
 read -p ""
