@@ -9,7 +9,7 @@ public class ResourceTests
     {
         return new Resource(
             id: Guid.NewGuid(),
-            resourceTypeId: Guid.NewGuid(),
+            resourceType: new ResourceType(Guid.NewGuid(), "Test Type"),
             name: "Toyota Camry");
     }
 
@@ -40,9 +40,9 @@ public class ResourceTests
     public void Constructor_ValidData_CreatesResource()
     {
         var id = Guid.NewGuid();
-        var resourceTypeId = Guid.NewGuid();
+        var resourceType = new ResourceType(Guid.NewGuid(), "Test Type");
 
-        var metadata = new Dictionary<string, object>
+        var metadata = new Dictionary<string, string>
         {
             ["brand"] = "Toyota",
             ["model"] = "Camry"
@@ -50,7 +50,7 @@ public class ResourceTests
         
         var resource = new Resource(
             id,
-            resourceTypeId,
+            resourceType,
             "  Toyota Camry  ",
             description: "  Автомобиль бизнес-класса  ",
             location: "  Москва  ",
@@ -58,7 +58,7 @@ public class ResourceTests
             metadata: metadata);
         
         Assert.Equal(id, resource.Id);
-        Assert.Equal(resourceTypeId, resource.ResourceTypeId);
+        Assert.Equal(resourceType.Id, resource.ResourceType.Id);
 
         Assert.Equal("Toyota Camry", resource.Name);
         Assert.Equal("Автомобиль бизнес-класса", resource.Description);
@@ -79,7 +79,7 @@ public class ResourceTests
     {
         var action = () => new Resource(
             Guid.Empty,
-            Guid.NewGuid(),
+            new ResourceType(Guid.NewGuid(), "Test Type"),
             "Toyota Camry");
         
         var exception = Assert.Throws<ArgumentException>(action);
@@ -89,23 +89,23 @@ public class ResourceTests
 
 
     [Fact]
-    public void Constructor_EmptyResourceTypeId_ThrowsArgumentException()
+    public void Constructor_NullResourceType_ThrowsArgumentException()
     {
         var action = () => new Resource(
             Guid.NewGuid(),
-            Guid.Empty,
+            null!,
             "Toyota Camry");
         
         var exception = Assert.Throws<ArgumentException>(action);
 
-        Assert.Equal("resourceTypeId", exception.ParamName);
+        Assert.Equal("resourceType", exception.ParamName);
     }
 
 
     [Fact]
     public void Constructor_EmptyName_ThrowsArgumentException()
     {
-        var action = () => new Resource(Guid.NewGuid(), Guid.NewGuid(), "");
+        var action = () => new Resource(Guid.NewGuid(), new ResourceType(Guid.NewGuid(), "Test Type"), "");
         
         var exception = Assert.Throws<ArgumentException>(action);
 
@@ -116,7 +116,7 @@ public class ResourceTests
     [Fact]
     public void Constructor_WhitespaceName_ThrowsArgumentException()
     {
-        var action = () => new Resource(Guid.NewGuid(), Guid.NewGuid(), "   ");
+        var action = () => new Resource(Guid.NewGuid(), new ResourceType(Guid.NewGuid(), "Test Type"), "   ");
         
         var exception = Assert.Throws<ArgumentException>(action);
 
@@ -129,7 +129,7 @@ public class ResourceTests
     {
         var action = () => new Resource(
             Guid.NewGuid(),
-            Guid.NewGuid(),
+            new ResourceType(Guid.NewGuid(), "Test Type"),
             "Toyota Camry",
             capacity: 0);
         
@@ -144,7 +144,7 @@ public class ResourceTests
     {
         var action = () => new Resource(
             Guid.NewGuid(),
-            Guid.NewGuid(),
+            new ResourceType(Guid.NewGuid(), "Test Type"),
             "Toyota Camry",
             capacity: -1);
         
@@ -159,7 +159,7 @@ public class ResourceTests
     {
         var resource = new Resource(
             Guid.NewGuid(),
-            Guid.NewGuid(),
+            new ResourceType(Guid.NewGuid(), "Test Type"),
             "Toyota Camry",
             capacity: null);
         
@@ -172,7 +172,7 @@ public class ResourceTests
     {
         var resource = new Resource(
             Guid.NewGuid(),
-            Guid.NewGuid(),
+            new ResourceType(Guid.NewGuid(), "Test Type"),
             "Resource",
             description: "  Description  ",
             location: "  Moscow  ");
@@ -236,7 +236,7 @@ public class ResourceTests
     {
         var resource = new Resource(
             Guid.NewGuid(),
-            Guid.NewGuid(),
+            new ResourceType(Guid.NewGuid(), "Test Type"),
             "Resource",
             description: "Description");
         
@@ -262,7 +262,7 @@ public class ResourceTests
     {
         var resource = new Resource(
             Guid.NewGuid(),
-            Guid.NewGuid(),
+            new ResourceType(Guid.NewGuid(), "Test Type"),
             "Resource",
             location: "Moscow");
         
@@ -278,7 +278,7 @@ public class ResourceTests
     {
         var resource = new Resource(
             Guid.NewGuid(),
-            Guid.NewGuid(),
+            new ResourceType(Guid.NewGuid(), "Test Type"),
             "Resource",
             capacity: 5);
         
@@ -292,7 +292,7 @@ public class ResourceTests
     {
         var resource = new Resource(
             Guid.NewGuid(),
-            Guid.NewGuid(),
+            new ResourceType(Guid.NewGuid(), "Test Type"),
             "Resource",
             capacity: 5);
         
@@ -330,7 +330,7 @@ public class ResourceTests
     {
         var resource = new Resource(
             Guid.NewGuid(),
-            Guid.NewGuid(),
+            new ResourceType(Guid.NewGuid(), "Test Type"),
             "Resource",
             capacity: 5);
         
@@ -347,11 +347,11 @@ public class ResourceTests
     {
         var resource = CreateValidResource();
 
-        var metadata = new Dictionary<string, object>
+        var metadata = new Dictionary<string, string>
         {
             ["brand"] = "Toyota",
             ["model"] = "Camry",
-            ["year"] = 2024
+            ["year"] = "2024"
         };
         
         resource.UpdateMetadata(metadata);
@@ -363,14 +363,14 @@ public class ResourceTests
     [Fact]
     public void UpdateMetadata_Null_ClearsMetadata()
     {
-        var metadata = new Dictionary<string, object>
+        var metadata = new Dictionary<string, string>
         {
             ["brand"] = "Toyota"
         };
 
         var resource = new Resource(
             Guid.NewGuid(),
-            Guid.NewGuid(),
+            new ResourceType(Guid.NewGuid(), "Test Type"),
             "Toyota Camry",
             metadata: metadata);
         
