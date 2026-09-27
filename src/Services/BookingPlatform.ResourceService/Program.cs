@@ -4,7 +4,7 @@ using BookingPlatform.ResourceService.Application.Resources.Create;
 using BookingPlatform.ResourceService.Infrastructure.MongoDB;
 using BookingPlatform.ResourceService.Infrastructure.MongoDB.Mappings;
 using BookingPlatform.ResourceService.Infrastructure.MongoDB.Repositories;
-using BookingPlatform.ResourceService.Application.Resources.Create;
+
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
