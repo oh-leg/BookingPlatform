@@ -2,7 +2,7 @@ namespace BookingPlatform.ResourceService.Domain.Entities;
 
 public sealed class ResourceOffer
 {
-    private readonly List<ResourceSchedule> _schedule = [];
+    private List<ResourceSchedule> _schedule = [];
     public IReadOnlyCollection<ResourceSchedule> Schedule => _schedule.AsReadOnly();
     /*конструктор для создания ResourceOffer из MongoDB*/
     private ResourceOffer()
