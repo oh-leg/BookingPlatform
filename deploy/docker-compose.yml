@@ -65,6 +65,19 @@ services:
     networks:
       - booking-network
 
+  mongodb:
+    image: mongo:latest
+    container_name: booking-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: secret
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - booking-network
+  
   minio:
     image: minio/minio:latest
     container_name: booking-minio
