@@ -29,7 +29,7 @@ docker-compose -f deploy/docker-compose.yml up -d
 
 ```bash
 # Поднять необходимые контейнеры для разработки в VS
-docker-compose --env-file .env.dev -f deploy/docker-compose.yml up -d keycloak-db keycloak redis minio minio-init
+docker-compose --env-file deploy/.env.dev -f deploy/docker-compose.yml up -d keycloak-db keycloak redis minio minio-init
 ```
 
 Будут подняты следующие сервисы:
