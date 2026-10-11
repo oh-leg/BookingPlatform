@@ -1,3 +1,4 @@
+using BookingPlatform.ResourceService.Infrastructure.MongoDB;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ internal sealed class GlobalExceptionHandler : IExceptionHandler
     {
         var (statusCode, title) = exception switch
         {
+            DatabaseUnavailableException => (StatusCodes.Status503ServiceUnavailable, "Service Unavailable"),
             ArgumentException => (StatusCodes.Status400BadRequest, "Bad Request"),
             InvalidOperationException => (StatusCodes.Status409Conflict, "Conflict"),
             _ => (StatusCodes.Status500InternalServerError, "Internal Server Error")
