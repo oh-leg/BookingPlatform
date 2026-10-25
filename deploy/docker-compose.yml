@@ -18,6 +18,25 @@ services:
     networks:
       - booking-network
 
+  booking-db:
+    image: postgres:17-alpine
+    container_name: booking-booking-db
+    environment:
+      POSTGRES_DB: booking
+      POSTGRES_USER: booking_user
+      POSTGRES_PASSWORD: booking_password
+    ports:
+      - "5434:5432"
+    volumes:
+      - booking_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U booking_user -d booking"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - booking-network
+
   keycloak:
     image: keycloak/keycloak:26.0.0
     container_name: booking-keycloak
@@ -142,7 +161,11 @@ services:
       context: ..
       dockerfile: src/Services/BookingPlatform.BookingService/Dockerfile
     container_name: booking-booking-service
+    depends_on:
+      booking-db:
+        condition: service_healthy
     environment:
+      - ConnectionStrings__BookingDb=Host=booking-db;Database=booking;Username=booking_user;Password=booking_password
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
     networks:
@@ -176,5 +199,6 @@ networks:
 
 volumes:
   keycloak_postgres_data:
+  booking_postgres_data:
   redis_data:
   minio_data:
