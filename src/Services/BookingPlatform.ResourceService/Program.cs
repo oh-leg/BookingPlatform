@@ -30,11 +30,12 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 builder.Services.AddOpenApi();
  builder.Services.AddControllers();
-
+ builder.Services.AddHealthChecks().AddCheck<MongoHealthCheck>("mongodb");
 var app = builder.Build();
 
 app.UseExceptionHandler();
 
+app.MapHealthChecks("/health");
 app.MapControllers();
 
 if (app.Environment.IsDevelopment())

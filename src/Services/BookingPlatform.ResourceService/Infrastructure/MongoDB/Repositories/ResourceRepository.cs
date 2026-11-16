@@ -15,16 +15,25 @@ public sealed class ResourceRepository : IResourceRepository
 
     public async Task<Resource?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _resources
-            .Find(x => x.Id == id)
-            .FirstOrDefaultAsync(cancellationToken);
+        try
+        {
+            return await _resources
+                .Find(x => x.Id == id)
+                .FirstOrDefaultAsync(cancellationToken);
+        }
+        //System.TimeoutException бросает TimeOutException. Считаю что MongoDB не доступно
+        catch (Exception ex) when (ex is MongoException or TimeoutException) { throw new DatabaseUnavailableException(ex); }
     }
 
     public async Task<IReadOnlyCollection<Resource>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        return await _resources
-            .Find(FilterDefinition<Resource>.Empty)
-            .ToListAsync(cancellationToken);
+        try
+        {
+            return await _resources
+                .Find(FilterDefinition<Resource>.Empty)
+                .ToListAsync(cancellationToken);
+        }
+        catch (Exception ex) when (ex is MongoException or TimeoutException) { throw new DatabaseUnavailableException(ex); }
     }
 
     public async Task AddAsync(Resource resource, CancellationToken cancellationToken = default)
@@ -32,9 +41,13 @@ public sealed class ResourceRepository : IResourceRepository
         if (resource is null)
             throw new ArgumentNullException(nameof(resource));
 
-        await _resources.InsertOneAsync(
-            resource,
-            cancellationToken: cancellationToken);
+        try
+        {
+            await _resources.InsertOneAsync(
+                resource,
+                cancellationToken: cancellationToken);
+        }
+        catch (Exception ex) when (ex is MongoException or TimeoutException) { throw new DatabaseUnavailableException(ex); }
     }
 
     public async Task UpdateAsync(Resource resource, CancellationToken cancellationToken = default)
@@ -42,9 +55,13 @@ public sealed class ResourceRepository : IResourceRepository
         if (resource is null)
             throw new ArgumentNullException(nameof(resource));
 
-        await _resources.ReplaceOneAsync(
-            x => x.Id == resource.Id,
-            resource,
-            cancellationToken: cancellationToken);
+        try
+        {
+            await _resources.ReplaceOneAsync(
+                x => x.Id == resource.Id,
+                resource,
+                cancellationToken: cancellationToken);
+        }
+        catch (Exception ex) when (ex is MongoException or TimeoutException) { throw new DatabaseUnavailableException(ex); }
     }
 }
