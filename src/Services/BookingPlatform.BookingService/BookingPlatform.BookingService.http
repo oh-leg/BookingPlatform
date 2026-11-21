@@ -1,6 +1,70 @@
-@BookingPlatform.BookingService_HostAddress = http://localhost:5007
+### Запросы через Gateway (http://localhost:5000/api/bookings/...).
+### Токен: POST http://localhost:8080/realms/booking-platform/protocol/openid-connect/token
+###   grant_type=password, client_id=booking-api, client_secret=your-client-secret,
+###   username=testuser|adminuser, password=password
 
-GET {{BookingPlatform.BookingService_HostAddress}}/weatherforecast/
-Accept: application/json
+@Gateway = http://localhost:5000/api/bookings
+@Token = <access_token>
+@ResourceId = 00000000-0000-0000-0000-000000000000
+@OfferId = 00000000-0000-0000-0000-000000000000
+@BookingId = 00000000-0000-0000-0000-000000000000
 
-###
+### Получить токен testuser
+POST http://localhost:8080/realms/booking-platform/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&client_id=booking-api&client_secret=your-client-secret&username=testuser&password=password
+
+### Свободные слоты
+GET {{Gateway}}/slots?resourceId={{ResourceId}}&offerId={{OfferId}}&from=2026-11-10&to=2026-11-12
+Authorization: Bearer {{Token}}
+
+### Создать бронь
+POST {{Gateway}}
+Authorization: Bearer {{Token}}
+Content-Type: application/json
+
+{
+  "resourceId": "{{ResourceId}}",
+  "offerId": "{{OfferId}}",
+  "startAt": "2026-11-10T07:00:00Z",
+  "comment": "Тестовая бронь"
+}
+
+### Мои брони
+GET {{Gateway}}?status=Confirmed
+Authorization: Bearer {{Token}}
+
+### Бронь по id
+GET {{Gateway}}/{{BookingId}}
+Authorization: Bearer {{Token}}
+
+### История брони
+GET {{Gateway}}/{{BookingId}}/history
+Authorization: Bearer {{Token}}
+
+### Отменить бронь
+POST {{Gateway}}/{{BookingId}}/cancel
+Authorization: Bearer {{Token}}
+Content-Type: application/json
+
+{
+  "reason": "Планы изменились"
+}
+
+### Подтвердить бронь (booking-admin)
+POST {{Gateway}}/{{BookingId}}/confirm
+Authorization: Bearer {{Token}}
+
+### Отклонить бронь (booking-admin)
+POST {{Gateway}}/{{BookingId}}/reject
+Authorization: Bearer {{Token}}
+Content-Type: application/json
+
+{
+  "reason": "Ресурс на обслуживании"
+}
+
+### Брони ресурса за период (booking-admin)
+GET {{Gateway}}/resources/{{ResourceId}}?from=2026-11-01T00:00:00Z&to=2026-12-01T00:00:00Z
+Authorization: Bearer {{Token}}

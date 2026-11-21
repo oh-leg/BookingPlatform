@@ -144,9 +144,48 @@ services:
       context: ..
       dockerfile: src/Services/BookingPlatform.ResourceService/Dockerfile
     container_name: booking-resource-service
+    depends_on:
+      resource-db:
+        condition: service_healthy
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
+      - MongoDb__ConnectionString=mongodb://resource-db:27017
+      - MongoDb__DatabaseName=resources
+    ports:
+      - "5001:8080"
+    networks:
+      - booking-network
+
+  resource-db:
+    image: mongo:7
+    container_name: booking-resource-db
+    volumes:
+      - resource_mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - booking-network
+
+  booking-db:
+    image: postgres:17-alpine
+    container_name: booking-booking-db
+    environment:
+      POSTGRES_DB: booking
+      POSTGRES_USER: booking_user
+      POSTGRES_PASSWORD: ${BOOKING_DB_PASSWORD:-booking_password}
+    ports:
+      - "5434:5432"
+    volumes:
+      - booking_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U booking_user -d booking"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - booking-network
 
@@ -155,9 +194,19 @@ services:
       context: ..
       dockerfile: src/Services/BookingPlatform.BookingService/Dockerfile
     container_name: booking-booking-service
+    depends_on:
+      booking-db:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__BookingDb=Host=booking-db;Port=5432;Database=booking;Username=booking_user;Password=${BOOKING_DB_PASSWORD:-booking_password}
+      - ResourceCatalog__BaseUrl=http://resource-service:8080
+      - KEYCLOAK_HOSTNAME=keycloak
+    ports:
+      - "5002:8080"
     networks:
       - booking-network
 
@@ -189,5 +238,7 @@ networks:
 
 volumes:
   keycloak_postgres_data:
+  booking_postgres_data:
+  resource_mongo_data:
   redis_data:
   minio_data:

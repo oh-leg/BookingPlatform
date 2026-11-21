@@ -16,7 +16,7 @@ export function TestApiPanel({ accessToken, onSessionExpired }: TestApiPanelProp
   return (
     <Card
       title="Тест API"
-      description="Запрос к /api/resources/test-data через YARP-шлюз с токеном Keycloak."
+      description="Запрос к /api/resources через YARP-шлюз с токеном Keycloak."
     >
       <div className={styles.actions}>
         <Button onClick={run} busy={pending}>
