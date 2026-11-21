@@ -1,8 +1,17 @@
 {
   "realm": "booking-platform",
   "enabled": true,
+  "sslRequired": "none",
   "displayName": "Booking Platform",
   "loginTheme": "booking",
+  "roles": {
+    "realm": [
+      {
+        "name": "booking-admin",
+        "description": "Администратор бронирований: подтверждение, отклонение и просмотр броней ресурсов"
+      }
+    ]
+  },
   "clients": [
     {
       "clientId": "booking-spa",
@@ -13,7 +22,7 @@
       "redirectUris": ["http://localhost:8080/*", "http://127.0.0.1:8080/*"],
       "webOrigins": ["http://localhost:8080", "http://127.0.0.1:8080"],
       "protocol": "openid-connect",
-      "defaultClientScopes": ["openid", "profile", "email", "roles"],
+      "defaultClientScopes": ["openid", "basic", "profile", "email", "roles"],
       "optionalClientScopes": ["address", "phone", "offline_access", "microprofile-jwt"],
       "attributes": {
         "pkce.code.challenge.method": "S256",
@@ -41,7 +50,7 @@
       "redirectUris": ["http://localhost:5000/*"],
       "webOrigins": ["http://localhost:5000"],
       "protocol": "openid-connect",
-      "defaultClientScopes": ["openid", "profile", "email", "roles"],
+      "defaultClientScopes": ["openid", "basic", "profile", "email", "roles"],
       "optionalClientScopes": ["address", "phone", "offline_access", "microprofile-jwt"],
       "protocolMappers": [
         {
@@ -72,6 +81,21 @@
         }
       ],
       "realmRoles": ["default-roles-booking-platform"]
+    },
+    {
+      "username": "adminuser",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "admin@example.com",
+      "firstName": "Admin",
+      "lastName": "User",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password"
+        }
+      ],
+      "realmRoles": ["default-roles-booking-platform", "booking-admin"]
     }
   ]
 }
