@@ -37,5 +37,5 @@ export async function apiFetch<T = unknown>(
 
 /** Диагностический эндпоинт ресурс-сервиса: структура ответа заранее не фиксирована. */
 export function fetchTestData(accessToken: string, options?: RequestOptions): Promise<unknown> {
-  return apiFetch('/api/resources/test-data', accessToken, options);
+  return apiFetch('/api/resources', accessToken, options);
 }
